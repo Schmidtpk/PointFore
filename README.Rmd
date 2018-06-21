@@ -1,0 +1,50 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# PointFore
+
+The goal of PointFore is to estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.
+
+Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
+
+Based on "Interpretation of Point Forecasts" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
+
+## Installation
+
+You can install PointFore from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("Schmidtpk/PointFore")
+```
+
+## Example
+
+This is a basic example which shows you how to evaluate which quantile is forecsted by the Greenbook GDP forecats:
+
+```{r example}
+library(PointFore)
+res <- estimate.functional(Y=GDP[,1],X=GDP[,2])
+summary(res)
+plot(res)
+```
+
+
+```{r example with state-dependence}
+res <- estimate.functional(Y=GDP[,1],X=GDP[,2],
+                           model=logistic,theta0=c(0,0),
+                           stateVariable = GDP[,2])
+summary(res)
+plot(res)
+```
