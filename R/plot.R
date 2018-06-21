@@ -10,6 +10,7 @@
 #' @method plot pointfore
 #'
 #' @import ggplot2
+#' @importFrom stats quantile complete.cases coef
 #'
 #' @return plot
 #' @export
@@ -19,6 +20,15 @@
 #' plot(res)
 plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=1, limits=NULL,...)
 {
+
+  ..scaled.. <- NULL
+
+  # to plot constant (state-independent models)
+  if(is.null(x$stateVariable))
+  {
+    pdf<-FALSE
+    x$stateVariable<-c(-1,0,1)
+  }
 
   if(!is.vector(x$stateVariable))
     stop("Can only plot one-dimensional states")
@@ -77,10 +87,16 @@ plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=
 
   if(!is.null(pdf))
     if(pdf==TRUE)
-      p.quantile <- p.quantile + geom_density(data = data.frame(x$stateVariable), aes(x=x$stateVariable,y=..scaled..), adjust=adjust.factor, fill="green", alpha=.2)+xlim(limits)
+      p.quantile <- p.quantile +
+    geom_density(data = data.frame(x$stateVariable),
+                 aes(x=x$stateVariable,y=..scaled..),
+                 adjust=adjust.factor,
+                 fill="green",
+                 alpha=.2)+
+        coord_cartesian(xlim=limits)
 
   p.quantile <- p.quantile +scale_y_continuous("forecasted level", limits=c(0,1))+
-    theme_classic(20)+  xlab("state variable")
+    theme_classic()+  xlab("state variable")
 
   p.quantile
 }

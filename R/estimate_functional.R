@@ -1,4 +1,21 @@
+#' Lagging variables for use in estimate functional
+#'
+#' @param vector vector to be lagged
+#' @param lag number of lags
+#'
+#' @return lagged vector of same length with NAs at beginning
+#' @export
+#'
+#' @examples
+#' lag(c(1,2,3))
+#' lag(c(1,2,3,4),lag=2)
+lag <- function(vector, lag=1)
+{
+  if(lag<0)
+    stop("Lag needs to be non-negative")
 
+  return(c(rep(NA,lag),vector[1:(length(vector)-lag)]))
+}
 
 #' Constant specification model
 #'
@@ -39,149 +56,77 @@ logistic <- function(stateVariable, theta)
 #' @param Y realized values
 #' @param X forecasts
 #' @param stateVariable state variable(s)
-#' @param instruments instruments (descriptive string or matrix of actual intsruments)
+#' @param instruments instruments (list of character describing instruments or matrix of actual intsruments)
+#' @param other_data optional for construction of instruments
 #' @param ... other parameters for gmm function (see ?gmm)
 #'
-#' @return Object of type resPF
+#' @return Object of type pointfore
 #' @export
 #'
 #' @examples
 #' estimate.functional(Y=GDP[,1],X=GDP[,2])
+#' estimate.functional(Y=GDP[,1],X=GDP[,2],instruments=c("X","lag(Y)"))
+#' estimate.functional(Y=GDP[,1],X=GDP[,2],other_data = data.frame(Z=GDP[,2]),
+#' instruments=c("Z","lag(Y)"))
 #' estimate.functional(Y=GDP[,1],X=GDP[,2],model=logistic,theta0=c(0,0),stateVariable = GDP[,2])
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = 0.5,
                                 Y, X, stateVariable=NULL,
-                                instruments = 'forecast',
+                                other_data = NULL,
+                                instruments = c("X","lag(Y)"),
                                 ...)
 {
-  ##### helper variables
-  extra <- 3
-  TT <- length(Y)-extra
-  T <- TT+extra
-  # Interval
-  int  <- (extra+1):T
-  int1 <- (extra):(T-1)
-  int2 <- (extra-1):(T-2)
-  int3 <- (extra-2):(T-3)
 
-
-  ############ Instruments
+  #if character, construct as described
   if(class(instruments)=='character')
   {
+      #start with constant
+      w <- rep(1,length(Y))
 
-    if(instruments=="constant")
-    {
-      w <- cbind(rep(1,TT))
+      #define dataframe
+      if(is.null(other_data))
+        other_data <- data.frame(X=X,Y=Y)
+      else
+        other_data <- cbind(data.frame(X=X,Y=Y),other_data)
 
-    } else if(instruments=='forecast')
-    {
+      #construct row for each instrument
+      for(inst_cur in instruments)
+      {
 
-      w <- cbind(rep(1,TT), # constant
-                 Y[int1], # lagged observation
-                 X[int])  # forecast
+        if(grepl("Y",inst_cur) & !grepl("lag",inst_cur))
+          warning("Y without lags is not a valid instrument as it is not in the information set of the forecaster.")
 
-    } else if(instruments=='forecastabs')
-    {
+        #add instrument
+        w <- cbind(w,eval(parse(text=inst_cur),other_data))
+      }
 
-      w <- cbind(rep(1,TT), # constant
-                 Y[int1], # lagged observation
-                 X[int],
-                 abs(X[int]))  # forecast
+      #keep only complete cases
+      compl <- complete.cases(w)
+      message(paste("Drop ", length(Y)-sum(compl), "case(s) because of chosen instruments"))
+      w <- w[compl,]
+      Y <- Y[compl]
+      X <- X[compl]
+      stateVariable <- stateVariable[compl]
 
-    } else if (instruments=='outcome2')##############################
-    {
+  } else if(class(instruments)%in% c("vector","matrix"))
+    { # use instrument data as given
 
-      w <- cbind( rep(1,length(int)),                    #constant
-                  Y[int1],
-                  Y[int2])
-
-
-    } else if (instruments=='ff66')##############################
-    {
-
-      w <- cbind( rep(1,length(int)),                    #constant
-                  X[int],                   #current value of forecast
-                  Y[int1]-X[int1],     #lagged value of forecast error
-                  (Y[int1]-X[int1])^2 ,      #lagged squared forecast error
-                  Y[int2]-X[int2],    # two lags forecast error
-                  X[int1],     #lagged value of forecast
-                  (Y[int2]-X[int2])^2            #two lags of squared forecast error
-      )
-
-
-    }  else if (instruments=='patton.correct2')##############################
-    {
-
-      w <- cbind( rep(1,length(int)),                    #constant
-                  X[int],                   #current value of forecast
-                  Y[int1]-X[int1],     #lagged value of forecast error
-                  Y[int2]-X[int2],      #lagged squared forecast error
-                  Y[int1],
-                  Y[int2],
-                  rep(3, length(int)),
-                  rep(4, length(int))# substituted in gmm with lagged V(x,y,theta)
-      )
-
-
-    } else if (instruments=='patton.short')##############################
-    {
-
-      w <- cbind( rep(1,length(int)),                    #constant
-                  X[int],                   #current value of forecast
-                  Y[int1]-X[int1],     #lagged value of forecast error
-                  Y[int1],
-                  rep(3, length(int))
-      )
-
-
-    } else if (instruments=='lagff66')##############################
-    {
-
-      w <- cbind( rep(1,length(int)),                    #constant
-                  X[int1],                   #current value of forecast
-                  Y[int2]-X[int2],     #lagged value of forecast error
-                  (Y[int2]-X[int2])^2 ,      #lagged squared forecast error
-                  Y[int3]-X[int3],    # two lags forecast error
-                  X[int2],     #lagged value of forecast
-                  (Y[int3]-X[int3])^2            #two lags of squared forecast error
-
-      )
-
-
-
-
-    } else {stop('Instrument description unknown')}
-
-    # If instruments are specified via character variables, use interval definition
-    Y <- Y[int]
-    X <- X[int]
-
-
-    #if state vector use appropriate subvector
-    if(is.null(dim(stateVariable)))
-      stateVariable<- stateVariable[(1+length(stateVariable)-length(Y)) :length(stateVariable)]
-    else #use appropriate submatrix
-      stateVariable<- stateVariable[(1+dim(stateVariable)[1]-length(Y)) :dim(stateVariable)[1],]
-
-
+      w <- instruments
   } else
   {
-    w <- instruments
+    stop("instruments has to be of class matrix, vector or character")
   }
 
 
-  ########### Identification function
-
+  # Construct Identification function
   V <- function(theta,x,y,stateVariable)
   {
     return(iden.fct(x=x,y=y,stateVariable=stateVariable, theta=theta,model=model))
   }
 
 
-
-  ######### Checks
-
+  #Checks
   if(dim(w)[1]!=length(Y) | dim(w)[1]!=length(X)){stop('Wrong dimensions')}
   if(dim(w)[1]<length(theta0)){stop('Not enough moment conditions')}
 
@@ -189,11 +134,13 @@ estimate.functional <- function(iden.fct = quantiles,
   # Determines the algorithm used in the GMM estimation (optim for multidimensional, nlminb for one-dimensional paramter space)
   if (length(theta0)>1){optfct <- 'optim'} else { optfct <- 'nlminb'}
 
+  stateV.cur <- if(is.null(stateVariable)) rep(0,length(X)) else stateVariable
+
   #safe length of model variable
-  if(is.null(dim(stateVariable)))
+  if(is.null(dim(stateV.cur)))
     model.dim <- 1
   else
-    model.dim<-dim(stateVariable)[2]
+    model.dim<-dim(stateV.cur)[2]
 
   # Generates function g
   g <- function(theta, m_data)
@@ -209,13 +156,13 @@ estimate.functional <- function(iden.fct = quantiles,
   }
 
 
-  if(is.null(stateVariable)){stateVariable <- rep(0,length(X))}
+  matrix_data <-cbind(X, Y, w, stateV.cur)
 
-  matrix_data <-cbind(X, Y, w, stateVariable)
+  #apply gmm
+  res <- gmm::gmm(g, x=matrix_data,t0=theta0,optfct=optfct,...)
 
 
-  res <- gmm::gmm(g, x=matrix_data,t0=theta0,...)
-
+  #safe results
   return(structure(list(
               gmm = res,
               iden.fct = iden.fct,
@@ -227,21 +174,45 @@ estimate.functional <- function(iden.fct = quantiles,
               ),class="pointfore"))
 }
 
-
+#' Identification function for state-dependent quantiles
+#'
+#' @param x forecast
+#' @param y realization
+#' @param stateVariable state variable
+#' @param theta model parameter to be estimated
+#' @param model model function
+#'
+#' @export
 quantiles<- function(x,y,stateVariable,theta,model)
 {
   (y<=x)-model(stateVariable=stateVariable, theta=theta)
 }
 
+
+#' Identification function for state-dependent expectiles
+#'
+#' @param x forecast
+#' @param y realization
+#' @param stateVariable state variable
+#' @param theta model parameter to be estimated
+#' @param model model function
+#'
+#' @export
 expectiles<- function(x,y,stateVariable,theta,model)
 {
   abs((y<=x)-model(stateVariable=stateVariable, theta=theta))*(x-y)
 }
 
-summary.pointfore <- function(res,...)
+
+#' @export
+summary.pointfore <- function(object,...)
 {
-  print(res$call)
-  summary(res$gmm)
+  gmm.sum <- summary(object$gmm)
+
+  list(call=object$call,
+       coefficients=gmm.sum$coefficients,
+#       vcov=vcov(object$gmm),
+       Jtest = gmm.sum$stest)
 }
 
 

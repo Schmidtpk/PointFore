@@ -1,0 +1,210 @@
+---
+title: "Tutorial for PointFore"
+author: "Patrick Schmidt"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+          fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Tutorial for PointFore}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+The PointFore package can be loaded the usual way.
+
+```{r}
+library(PointFore)
+```
+
+The main function is *estimate.functional()* which creates an object of class *pointfore*. Many paramters are available but most of them can be set to their default values. They are explained in details below through examples.
+
+The function *estimate.functional()* provides a convenient wrapper for the estimation based on the *gmm package*. The main arguments are the *forecast X* and the *realizations Y*. Further, one can choose between *quantiles* and *expectiles* and the model that describes the forecasted level.
+
+The available methods for a pointfore object are *plot* and *summary*.
+
+
+# Simulated Example
+
+We illustrate the application of the package in a simple simulated example.
+
+## Generate data
+
+First, we generate a time series Y with mean Y.mean. Further, we generate an **optimal mean-forecast X**.
+
+```{r}
+set.seed(1)
+
+Y.mean <- rnorm(200,0,1)
+
+Y <- rnorm(200,Y.mean,1)
+
+X <- Y.mean
+```
+
+## Estimation of the functional
+
+Now, we apply a class of **constant expectile forecasts**. The *summary* function shows the call and the estimation result, and the J-test of overidentifying restrictions.
+
+```{r}
+res.const <- estimate.functional(
+                            iden.fct = expectiles,
+                            model = constant,
+                            Y = Y,
+                            X = X,
+                            theta0 = 0.5)
+
+summary(res.const)
+```
+
+The results imply an expectile level close to 0.5. 
+
+
+
+In a second step, we estimate a **state-dependent expectile** model, where the level of the expectile can depend on the current forecast.
+
+The *logistic* model is already implemented in the *PointFore* package. The level of the forecast depends on the the state variable s, via the formula
+
+$$ level = inv.logit(\theta_1 + s \theta_2)= (1+exp(\theta_1 + s \theta_2)^{-1})^{-1}. $$.
+
+```{r}
+res.flexible <- estimate.functional(iden.fct = expectiles,
+                                    model = logistic,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    stateVariable = X)
+summary(res.flexible)
+```
+
+
+## Plot results
+
+For interpretation, the results can be plotted with the according pointwise confidence intervals. For state-dependent models the state is plotted on the x-axis. In green, we see a density estimate of the state.
+
+```{r, fig.show="hold", fig.cap = "The results of the constant and flexible model plotted against the forecast."}
+plot(res.const)
+plot(res.flexible)
+```
+
+
+## Wald tests
+
+It is straigt forward to apply standard Wald tests to the estimated *gmm-object*. First, we have to load the car package.
+
+```{r}
+library(car)
+```
+
+For the constant model, the mean forecast, which is equal to the $0.5$-expectile forecast cannot be rejected by a Wald-type test
+
+```{r}
+linearHypothesis(res.const$gmm,"Theta[1]=0.5")
+```
+
+
+Similarly, the flexible logistic model cannot reject the mean-forecast ($H_0: \theta_1=0 \wedge \theta_2 =0$), nor state-independence($H_0: \theta_2 =0$).
+
+```{r}
+linearHypothesis(res.flexible$gmm,c("Theta[1]=0", "Theta[2]=0"))
+
+linearHypothesis(res.flexible$gmm,"Theta[2]=0")
+```
+
+
+
+
+# Creating your own specification models
+
+You can also **create your own specification models**, which describe how the levels of the quantile/expectile depend on the state variable.
+
+The two parameters stateVariable and theta are necessary. The output is the level and should always be in the unit interval.
+
+```{r}
+break_model <- function(stateVariable, theta)
+{
+  if(length(theta)!=2)
+    stop("Wrong dimension of theta")
+  
+  return(boot::inv.logit(theta[1]+theta[2]*(stateVariable>0)))
+}
+```
+
+Now, we can estimate the model
+
+```{r}
+res.break <- estimate.functional(iden.fct = expectiles,
+                                    model = break_model,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    stateVariable = X)
+
+summary(res.break)
+
+plot(res.break)
+```
+
+
+If we use a **forecast that is biased** for positive means:
+
+```{r}
+X <- Y.mean + 0.2 *(Y.mean>0)
+
+res.break <- estimate.functional(iden.fct = expectiles,
+                                    model = break_model,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    stateVariable = X)
+
+summary(res.break)
+
+plot(res.break)
+```
+
+A bias that can also be detected by the logistic model, which has a similar shape.
+
+```{r}
+res.logistic <- estimate.functional(iden.fct = expectiles,
+                                    model = logistic,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    stateVariable = X)
+
+summary(res.logistic)
+
+plot(res.logistic)
+```
+
+However, the biased forecast is **not optimal with respect to the logistic model**. The deviation can be detected by the J-test of overidentifying restrictions if we use appropriate instruments, that generate a sufficiently rich information set to test for.
+
+If we include the squared forecast with its original sign in the instruments, the test rejects optimality with respect to the logistic model with a p-value below 0.01 and correctly cannot reject optimality with respect to the break model with a p-value of 0.09.
+
+
+```{r}
+res.logistic <- estimate.functional(iden.fct = expectiles,
+                                    model = logistic,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    instruments = c("lag(Y)","X","sign(X)*X^2"),
+                                    stateVariable = X)
+
+summary(res.logistic)$Jtest
+
+res.break <- estimate.functional(iden.fct = expectiles,
+                                    model = break_model,
+                                    Y = Y,X = X,
+                                    theta0 = c(0,0),
+                                    instruments = c("lag(Y)","X","sign(X)*X^2"),
+                                    stateVariable = X)
+
+summary(res.break)$Jtest
+```

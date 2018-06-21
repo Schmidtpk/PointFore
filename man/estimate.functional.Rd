@@ -5,7 +5,8 @@
 \title{Estimate Functional}
 \usage{
 estimate.functional(iden.fct = quantiles, model = constant, theta0 = 0.5,
-  Y, X, stateVariable = NULL, instruments = "forecast", ...)
+  Y, X, stateVariable = NULL, other_data = NULL, instruments = c("X",
+  "lag(Y)"), ...)
 }
 \arguments{
 \item{iden.fct}{identification function. Standard choice is quantiles. Alternative is expectiles.}
@@ -20,17 +21,22 @@ estimate.functional(iden.fct = quantiles, model = constant, theta0 = 0.5,
 
 \item{stateVariable}{state variable(s)}
 
-\item{instruments}{instruments (descriptive string or matrix of actual intsruments)}
+\item{other_data}{optional for construction of instruments}
+
+\item{instruments}{instruments (list of character describing instruments or matrix of actual intsruments)}
 
 \item{...}{other parameters for gmm function (see ?gmm)}
 }
 \value{
-Object of type resPF
+Object of type pointfore
 }
 \description{
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
 }
 \examples{
 estimate.functional(Y=GDP[,1],X=GDP[,2])
+estimate.functional(Y=GDP[,1],X=GDP[,2],instruments=c("X","lag(Y)"))
+estimate.functional(Y=GDP[,1],X=GDP[,2],other_data = data.frame(Z=GDP[,2]),
+instruments=c("Z","lag(Y)"))
 estimate.functional(Y=GDP[,1],X=GDP[,2],model=logistic,theta0=c(0,0),stateVariable = GDP[,2])
 }
