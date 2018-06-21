@@ -35,8 +35,11 @@ This is a basic example which shows you how to evaluate which quantile is forecs
 
 ```{r example}
 library(PointFore)
+
 res <- estimate.functional(Y=GDP[,1],X=GDP[,2])
+
 summary(res)
+
 plot(res)
 ```
 
@@ -45,6 +48,8 @@ plot(res)
 res <- estimate.functional(Y=GDP[,1],X=GDP[,2],
                            model=logistic,theta0=c(0,0),
                            stateVariable = GDP[,2])
+
 summary(res)
+
 plot(res)
 ```
