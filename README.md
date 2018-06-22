@@ -31,8 +31,10 @@ library(PointFore)
 #> The following object is masked from 'package:stats':
 #> 
 #>     lag
+
 res <- estimate.functional(Y=GDP[,1],X=GDP[,2])
 #> Drop  1 case(s) because of chosen instruments
+
 summary(res)
 #> $call
 #> estimate.functional(Y = GDP[, 1], X = GDP[, 2])
@@ -47,16 +49,23 @@ summary(res)
 #> 
 #>                 J-test    P-value 
 #> Test E(g)=0:    6.812312  0.033168
+
 plot(res)
 ```
 
 ![](README-example-1.png)
 
+On average the forecast is over-optimistic with a forecasted quantile of 0.59. The J-test rejects optimality for this model.
+
+In the next step, we apply a more general model, where the forecasted quantile depends on the current forecast via a logistic model.
+
 ``` r
 res <- estimate.functional(Y=GDP[,1],X=GDP[,2],
-                           model=logistic,theta0=c(0,0),
+                           model=logistic,
+                           theta0=c(0,0),
                            stateVariable = GDP[,2])
 #> Drop  1 case(s) because of chosen instruments
+
 summary(res)
 #> $call
 #> estimate.functional(model = logistic, theta0 = c(0, 0), Y = GDP[, 
@@ -73,7 +82,10 @@ summary(res)
 #> 
 #>                 J-test   P-value
 #> Test E(g)=0:    1.37263  0.24136
+
 plot(res)
 ```
 
 ![](README-example%20with%20state-dependence-1.png)
+
+We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of 0.24 in the J-Test of overidentifying restrictions.
