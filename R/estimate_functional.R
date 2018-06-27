@@ -41,7 +41,6 @@ constant <- function(stateVariable, theta)
 logistic <- function(stateVariable, theta)
 {
   if(length(theta)!=2){stop("Wrong dimension of parameter theta for logistic model")}
-  if(identical(rep(0,length(stateVariable)),stateVariable)){stop("State variable is zero")}
 
   return(boot::inv.logit(stateVariable*theta[2]+theta[1]))
 }
@@ -64,11 +63,14 @@ logistic <- function(stateVariable, theta)
 #' @export
 #'
 #' @examples
-#' estimate.functional(Y=GDP[,1],X=GDP[,2])
-#' estimate.functional(Y=GDP[,1],X=GDP[,2],instruments=c("X","lag(Y)"))
-#' estimate.functional(Y=GDP[,1],X=GDP[,2],other_data = data.frame(Z=GDP[,2]),
+#' estimate.functional(Y=precipitation[,1],X=precipitation[,2])
+#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+#' instruments=c("X","lag(Y)"))
+#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+#' other_data = data.frame(Z=precipitation[,2]),
 #' instruments=c("Z","lag(Y)"))
-#' estimate.functional(Y=GDP[,1],X=GDP[,2],model=logistic,theta0=c(0,0),stateVariable = GDP[,2])
+#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+#' model=logistic,theta0=c(0,0),stateVariable = precipitation[,2])
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = 0.5,

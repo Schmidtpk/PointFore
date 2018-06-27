@@ -34,9 +34,12 @@ Object of type pointfore
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
 }
 \examples{
-estimate.functional(Y=GDP[,1],X=GDP[,2])
-estimate.functional(Y=GDP[,1],X=GDP[,2],instruments=c("X","lag(Y)"))
-estimate.functional(Y=GDP[,1],X=GDP[,2],other_data = data.frame(Z=GDP[,2]),
+estimate.functional(Y=precipitation[,1],X=precipitation[,2])
+estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+instruments=c("X","lag(Y)"))
+estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+other_data = data.frame(Z=precipitation[,2]),
 instruments=c("Z","lag(Y)"))
-estimate.functional(Y=GDP[,1],X=GDP[,2],model=logistic,theta0=c(0,0),stateVariable = GDP[,2])
+estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+model=logistic,theta0=c(0,0),stateVariable = precipitation[,2])
 }

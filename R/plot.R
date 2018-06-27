@@ -16,7 +16,9 @@
 #' @export
 #'
 #' @examples
-#' res <- estimate.functional(Y=GDP[,1],X=GDP[,2],model=logistic,theta0=c(0,0),stateVariable = GDP[,2])
+#' res <- estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+#' model=logistic,theta0=c(0,0),
+#' stateVariable = precipitation[,2])
 #' plot(res)
 plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=1, limits=NULL,...)
 {
