@@ -20,7 +20,4 @@ precipitation
 UK from the high-resolution model of the
 European Centre for Medium-Range Weather Forecasts (ECMWF). The data contains observations from 2012 to 2016.
 }
-\details{
-We thank the ECMWF for their support. Further details can be found on https://www.ecmwf.int/.
-}
 \keyword{datasets}

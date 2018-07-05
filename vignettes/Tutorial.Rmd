@@ -184,6 +184,9 @@ summary(res.logistic)
 plot(res.logistic)
 ```
 
+
+# Applying non-standard instruments
+
 However, the biased forecast is **not optimal with respect to the logistic model**. The deviation can be detected by the J-test of overidentifying restrictions if we use appropriate instruments, that generate a sufficiently rich information set to test for.
 
 If we include the squared forecast with its original sign in the instruments, the test rejects optimality with respect to the logistic model with a p-value below 0.01 and correctly cannot reject optimality with respect to the break model with a p-value of 0.09.

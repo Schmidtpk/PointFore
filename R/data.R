@@ -12,7 +12,6 @@
 #'   \item X: according point forecast in millimeter issued one day ahead (0 -- 40)
 #' }
 #'
-#' @source https://www.philadelphiafed.org/research-and-data/real-time-center/greenbook-data/philadelphia-data-set
 #'
 "precipitation"
 

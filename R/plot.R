@@ -44,11 +44,11 @@ plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=
   alpha <- function(y,theta) x$model(stateVariable = y, theta = theta)
 
   if(is.null(limits)){
-    interval_state <- seq(quantile(x$stateVariable, probs = 0.01),quantile(x$stateVariable, probs = 0.99), length.out=20)
+    interval_state <- seq(quantile(x$stateVariable, probs = 0.01),quantile(x$stateVariable, probs = 0.99), length.out=100)
     limits <- interval_state[c(1,length(interval_state))]
   } else {
     if(length(limits)!=2) {stop('Limits not well-defined')}
-    interval_state <- seq(limits[1],limits[2], length.out=20)
+    interval_state <- seq(limits[1],limits[2], length.out=100)
   }
 
 
