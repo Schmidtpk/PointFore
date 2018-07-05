@@ -31,7 +31,7 @@ devtools::install_github("Schmidtpk/PointFore")
 
 ## Example
 
-This is a basic example which shows you how to evaluate which quantile is forecsted by the Greenbook GDP forecats:
+This is a basic example which shows you how to evaluate which quantile is forecasted by the Greenbook GDP forecats:
 
 ```{r example}
 library(PointFore)
