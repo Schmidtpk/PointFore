@@ -27,8 +27,8 @@ plot
 Plots object of class "pointfore"
 }
 \examples{
-res <- estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 model=logistic,theta0=c(0,0),
-stateVariable = precipitation[,2])
+stateVariable = lag(GDP$observation))
 plot(res)
 }

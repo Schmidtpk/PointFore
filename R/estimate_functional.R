@@ -63,14 +63,14 @@ logistic <- function(stateVariable, theta)
 #' @export
 #'
 #' @examples
-#' estimate.functional(Y=precipitation[,1],X=precipitation[,2])
-#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
+#' estimate.functional(Y=GDP$observation,X=GDP$forecast)
+#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
 #' instruments=c("X","lag(Y)"))
-#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
-#' other_data = data.frame(Z=precipitation[,2]),
+#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
+#' other_data = data.frame(Z=GDP$forecast),
 #' instruments=c("Z","lag(Y)"))
-#' estimate.functional(Y=precipitation[,1],X=precipitation[,2],
-#' model=logistic,theta0=c(0,0),stateVariable = precipitation[,2])
+#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
+#' model=logistic,theta0=c(0,0),stateVariable = GDP$forecast)
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = 0.5,
@@ -159,6 +159,7 @@ estimate.functional <- function(iden.fct = quantiles,
 
 
   matrix_data <-cbind(X, Y, w, stateV.cur)
+
 
   #apply gmm
   res <- gmm::gmm(g, x=matrix_data,t0=theta0,optfct=optfct,...)
