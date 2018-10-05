@@ -128,9 +128,14 @@ estimate.functional <- function(iden.fct = quantiles,
   }
 
 
-  #Checks
+  ### Checks
+
   if(dim(w)[1]!=length(Y) | dim(w)[1]!=length(X)){stop('Wrong dimensions')}
   if(dim(w)[1]<length(theta0)){stop('Not enough moment conditions')}
+
+  #check if matrix invertible
+  if(qr(w)$rank!=ncol(w))
+    stop("Matrix of instruments does not have full rank. Choice of instruments may be invalid.")
 
 
   # Determines the algorithm used in the GMM estimation (optim for multidimensional, nlminb for one-dimensional paramter space)
