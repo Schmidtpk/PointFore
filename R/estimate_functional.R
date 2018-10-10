@@ -88,7 +88,7 @@ probit <- function(stateVariable, theta)
 #' model=logistic,theta0=c(0,0),stateVariable = GDP$forecast)
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
-                                theta0 = 0.5,
+                                theta0 = NULL,
                                 Y, X, stateVariable=NULL,
                                 other_data = NULL,
                                 instruments = c("X","lag(Y)"),
@@ -151,6 +151,18 @@ estimate.functional <- function(iden.fct = quantiles,
   #check if matrix invertible
   if(qr(w)$rank!=ncol(w))
     stop("Matrix of instruments does not have full rank. Choice of instruments may be invalid.")
+
+  #choose theta0 automatically if not given
+  if(is.null(theta0))
+  {
+    message("Chose parameter theta0 automatically as not given.")
+
+
+    if(sum(sapply(c(constant), identical, model))>0)
+                {theta0 <- 0.5} else {if(sum(sapply(c(logistic, probit), identical, model))>0)
+                {theta0 <- c(0,0)} else {stop("Model unknown, specify theta0.")}}
+  }
+
 
 
   # Determines the algorithm used in the GMM estimation (optim for multidimensional, nlminb for one-dimensional paramter space)
