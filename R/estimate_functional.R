@@ -45,6 +45,21 @@ logistic <- function(stateVariable, theta)
   return(boot::inv.logit(stateVariable*theta[2]+theta[1]))
 }
 
+
+#' propit specification model
+#'
+#' @param stateVariable state variable
+#' @param theta parameter
+#'
+#' @return numeric level
+#' @export
+probit <- function(stateVariable, theta)
+{
+  if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit model")}
+
+  return(stats::pnorm(stateVariable*theta[2]+theta[1]))
+}
+
 #' Estimate Functional
 #'
 #' Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
