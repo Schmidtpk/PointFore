@@ -72,6 +72,8 @@ probit <- function(stateVariable, theta)
 #' @param stateVariable state variable(s)
 #' @param instruments instruments (list of character describing instruments or matrix of actual intsruments)
 #' @param other_data optional for construction of instruments
+#' @param prewhite logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
+#' If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (see ?gmm)
 #' @param ... other parameters for gmm function (see ?gmm)
 #'
 #' @return Object of type pointfore
@@ -92,6 +94,7 @@ estimate.functional <- function(iden.fct = quantiles,
                                 Y, X, stateVariable=NULL,
                                 other_data = NULL,
                                 instruments = c("X","lag(Y)"),
+                                prewhite=F,
                                 ...)
 {
 
@@ -192,9 +195,8 @@ estimate.functional <- function(iden.fct = quantiles,
 
   matrix_data <-cbind(X, Y, w, stateV.cur)
 
-
   #apply gmm
-  res <- gmm::gmm(g, x=matrix_data,t0=theta0,optfct=optfct,...)
+  res <- gmm::gmm(g, x=matrix_data,t0=theta0,optfct=optfct,prewhite=prewhite,...)
 
 
   #safe results
