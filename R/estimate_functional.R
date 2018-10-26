@@ -71,7 +71,7 @@ probit_linear <- function(stateVariable, theta)
 #' @export
 probit_spline3 <- function(stateVariable, theta)
 {
-  if(length(theta)!=4){stop("Wrong dimension of parameter theta for probit model")}
+  if(length(theta)!=4){stop("Wrong dimension of parameter theta for cubic probit model")}
 
   return(stats::pnorm(stateVariable^3*theta[4]+stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
 }
@@ -88,7 +88,7 @@ probit_spline3 <- function(stateVariable, theta)
 #' @export
 probit_spline2 <- function(stateVariable, theta)
 {
-  if(length(theta)!=3){stop("Wrong dimension of parameter theta for probit model")}
+  if(length(theta)!=3){stop("Wrong dimension of parameter theta for quadratic probit model")}
 
   return(stats::pnorm(stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
 }
@@ -202,7 +202,7 @@ estimate.functional <- function(iden.fct = quantiles,
                 {theta0 <- 0.5}
     else {if(sum(sapply(c(probit_spline2), identical, model))>0)
                 {theta0 <- rep(0,3)}
-    else {if(sum(sapply(c(probit_spline3, spline3), identical, model))>0)
+    else {if(sum(sapply(c(probit_spline3), identical, model))>0)
                 {theta0 <- rep(0,4)}
     else {if(sum(sapply(c(probit_linear,logistic_linear, spline2), identical, model))>0)
                 {theta0 <- c(0,0)} else {stop("Model unknown, specify theta0.")}}}}
