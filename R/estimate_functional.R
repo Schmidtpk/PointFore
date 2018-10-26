@@ -71,7 +71,7 @@ probit_linear <- function(stateVariable, theta)
 #' @export
 probit_spline3 <- function(stateVariable, theta)
 {
-  if(length(theta)!=4){stop("Wrong dimension of parameter theta for probit model")}
+  if(length(theta)!=4){stop("Wrong dimension of parameter theta for cubic probit model")}
 
   return(stats::pnorm(stateVariable^3*theta[4]+stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
 }
@@ -88,7 +88,7 @@ probit_spline3 <- function(stateVariable, theta)
 #' @export
 probit_spline2 <- function(stateVariable, theta)
 {
-  if(length(theta)!=3){stop("Wrong dimension of parameter theta for probit model")}
+  if(length(theta)!=3){stop("Wrong dimension of parameter theta for quadratic probit model")}
 
   return(stats::pnorm(stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
 }
