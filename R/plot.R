@@ -5,6 +5,7 @@
 #' @param pdf logic if pdf estimate should be plotted
 #' @param adjust.factor adjust factor for estimating pdf (controls smoothness)
 #' @param limits 2-dimensional vector defining range of x-axis
+#' @param hline if TRUE plots horizontal line at 0.5. if numeric plot horizontal line at value.
 #' @param ... other parameters
 #'
 #' @method plot pointfore
@@ -20,7 +21,7 @@
 #' model=logistic,theta0=c(0,0),
 #' stateVariable = lag(GDP$observation))
 #' plot(res)
-plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=1, limits=NULL,...)
+plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=NULL, adjust.factor=1, limits=NULL,...)
 {
 
   ..scaled.. <- NULL
@@ -96,6 +97,16 @@ plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, adjust.factor=
                  fill="green",
                  alpha=.2)+
         coord_cartesian(xlim=limits)
+
+  if(!is.null(hline))
+  {
+    if(is.logical(hline))
+      if(isTRUE(hline))
+        hline<-.5
+      else next
+
+    p.quantile <- p.quantile + ggplot2::geom_hline(yintercept = hline,linetype=2)
+  }
 
   p.quantile <- p.quantile +scale_y_continuous("forecasted level", limits=c(0,1))+
     theme_classic()+  xlab("state variable")

@@ -31,14 +31,14 @@ constant <- function(stateVariable, theta)
 
 
 
-#' logistic specification model
+#' logistic-linear specification model
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
 #'
 #' @return numeric level
 #' @export
-logistic <- function(stateVariable, theta)
+logistic_linear <- function(stateVariable, theta)
 {
   if(length(theta)!=2){stop("Wrong dimension of parameter theta for logistic model")}
 
@@ -46,19 +46,55 @@ logistic <- function(stateVariable, theta)
 }
 
 
-#' propit specification model
+#' linear specification model with probit link
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
 #'
 #' @return numeric level
 #' @export
-probit <- function(stateVariable, theta)
+probit_linear <- function(stateVariable, theta)
 {
-  if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit model")}
+  if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit linear model")}
 
   return(stats::pnorm(stateVariable*theta[2]+theta[1]))
 }
+
+
+
+#' cubic spline specification model with probit link
+#'
+#' @param stateVariable state variable
+#' @param theta parameter
+#'
+#' @return numeric level
+#' @export
+probit_spline3 <- function(stateVariable, theta)
+{
+  if(length(theta)!=4){stop("Wrong dimension of parameter theta for probit model")}
+
+  return(stats::pnorm(stateVariable^3*theta[4]+stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
+}
+
+
+
+
+#' quadratic spline specification model with probit link
+#'
+#' @param stateVariable state variable
+#' @param theta parameter
+#'
+#' @return numeric level
+#' @export
+probit_spline2 <- function(stateVariable, theta)
+{
+  if(length(theta)!=3){stop("Wrong dimension of parameter theta for probit model")}
+
+  return(stats::pnorm(stateVariable^2*theta[3]+stateVariable*theta[2]+theta[1]))
+}
+
+
+
 
 #' Estimate Functional
 #'
@@ -69,7 +105,7 @@ probit <- function(stateVariable, theta)
 #' @param theta0 starting value for optimization
 #' @param Y realized values
 #' @param X forecasts
-#' @param stateVariable state variable(s)
+#' @param stateVariable state variable(s) as vector or matrix of column vectors.
 #' @param instruments instruments (list of character describing instruments or matrix of actual intsruments)
 #' @param other_data optional for construction of instruments
 #' @param prewhite logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
@@ -91,10 +127,11 @@ probit <- function(stateVariable, theta)
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = NULL,
-                                Y, X, stateVariable=NULL,
+                                Y, X,
+                                stateVariable=NULL,
                                 other_data = NULL,
                                 instruments = c("X","lag(Y)"),
-                                prewhite=F,
+                                prewhite = F,
                                 ...)
 {
 
@@ -158,12 +195,17 @@ estimate.functional <- function(iden.fct = quantiles,
   #choose theta0 automatically if not given
   if(is.null(theta0))
   {
-    message("Chose parameter theta0 automatically as not given.")
+    message("Choose parameter theta0 automatically.")
 
 
     if(sum(sapply(c(constant), identical, model))>0)
-                {theta0 <- 0.5} else {if(sum(sapply(c(logistic, probit), identical, model))>0)
-                {theta0 <- c(0,0)} else {stop("Model unknown, specify theta0.")}}
+                {theta0 <- 0.5}
+    else {if(sum(sapply(c(probit_spline2), identical, model))>0)
+                {theta0 <- rep(0,3)}
+    else {if(sum(sapply(c(probit_spline3, spline3), identical, model))>0)
+                {theta0 <- rep(0,4)}
+    else {if(sum(sapply(c(probit_linear,logistic_linear, spline2), identical, model))>0)
+                {theta0 <- c(0,0)} else {stop("Model unknown, specify theta0.")}}}}
   }
 
 

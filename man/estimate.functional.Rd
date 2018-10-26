@@ -19,7 +19,7 @@ estimate.functional(iden.fct = quantiles, model = constant, theta0 = NULL,
 
 \item{X}{forecasts}
 
-\item{stateVariable}{state variable(s)}
+\item{stateVariable}{state variable(s) as vector or matrix of column vectors.}
 
 \item{other_data}{optional for construction of instruments}
 

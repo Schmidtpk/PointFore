@@ -5,7 +5,7 @@
 \title{Plots object of class "pointfore"}
 \usage{
 \method{plot}{pointfore}(x, conf.levels = c(0.6, 0.9), pdf = TRUE,
-  adjust.factor = 1, limits = NULL, ...)
+  hline = NULL, adjust.factor = 1, limits = NULL, ...)
 }
 \arguments{
 \item{x}{object of class "pointfore"}
@@ -13,6 +13,8 @@
 \item{conf.levels}{one or two confidence levels for pointwise confidence intervals}
 
 \item{pdf}{logic if pdf estimate should be plotted}
+
+\item{hline}{if TRUE plots horizontal line at 0.5. if numeric plot horizontal line at value.}
 
 \item{adjust.factor}{adjust factor for estimating pdf (controls smoothness)}
 
