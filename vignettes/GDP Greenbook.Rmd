@@ -1,0 +1,151 @@
+---
+title: "GDP Greenbook forecasts"
+author: "Patrick Schmidt"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+
+vignette: >
+  %\VignetteIndexEntry{GDP Greenbook}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Data
+
+```{r, fig.show='hold', fig.width = 6, fig.cap = 'Time series of one-quarter ahead Greenbook forecasts (crosses) and respective observations (solid line) of real GDP growth in the US.'}
+  
+library(PointFore)
+library(ggplot2)
+
+GDP$Date <- as.numeric(row.names(GDP))
+
+ggplot(GDP)+
+  geom_line(aes(x=Date,y=observation))+
+  geom_point(aes(x=Date,y=forecast), color = 'red', size = 2, shape=4)
+  
+```
+
+# Analysis
+
+Let us analyse the forecast.
+
+## Replication of the results in "Interpretation of Point Forecasts with Unknown Directive" by Schmidt, Katzfuss and Gneiting
+
+First, we replicate the results from the original paper.
+
+```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit) link that depends on the current forecast.'}
+
+res <- estimate.functional(model = probit_linear,
+                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+summary(res)
+plot(res,hline = TRUE)
+```
+
+The evidence can be summarized as follows. The forecast indicates overshooting in the presence of extreme expected growth. There is strong evidence of overshooting in times of high growth (current forecast > 3) and weak evidence in times of low growth (current forecast < 0, recession expected). Further, there is no evidence that the forecast is sub-optimal as the optimality test has a p-value of `r round(summary(res$gmm)$stest$test[2],digits=2)`. Hence, the assumption that the forecast is generate as state-dependent quantile
+$$X_t = q_{m(X_{t},\theta)}(Y_t|\mathcal{F}_t).$$
+seems valid.
+
+Further, there is evidence that the forecasted level actually depends on the current forecast as the Wald-test for $\theta_2=0$ has a p-value of `r round(summary(res$gmm)$coefficients[2,4],digits=3)`.
+That is the assumption that the forecast is generate as optimal constant quantile forecast does not seem to hold:
+
+$$X_t = q_{\tau}(Y_t|\mathcal{F}_t).$$
+
+## Different information sets (instrumental vectors)
+
+In the following we apply the same analysis with different instrumental vectors. The standard in the estimate.functional function is c("lag(Y)","X") which signifies that the instruments are given by $$w_t=(1,y_{t-1},x_t)'.$$
+
+
+As first alternative, we consider only lagged values as instruments. That is the instruments are given by $$w_t=(1,y_{t-1},y_{t-2})'.$$
+
+
+
+```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit link) that depends on the current forecast with instruments $w_t=(1, Y_{t-1}, Y_{t-2})$.'}
+
+res <- estimate.functional(model = probit_linear, instruments = c("lag(Y)","lag(lag(Y))"),
+                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+summary(res)
+plot(res,hline = TRUE)
+```
+
+
+As argued in the main paper, this choice often lags power against identifying misspecified models. And indeed, we observe large confidence bands and a high p-value indicating that the model fits well. Arguably this is because the instruments generate a rather limited information set, such that forecast optimality with respect to this limited information set is a weak requirement.
+
+
+As second alternative, we consider the larger set of instruments used in the other simulation study in the main paper. That is the instruments are given by $$W_t = \left( 1, X_t, X_{t-1} - Y_{t-1}, (X_{t-1} - Y_{t-1})^2, X_{t-1}, X_{t-2} - Y_{t-2}, (X_{t-2} - Y_{t-2})^2 \right)'  '.$$
+
+
+
+```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit link) that depends on the current forecast with instruments $w_t=(1, X_t, X_{t-1} - Y_{t-1}, (X_{t-1} - Y_{t-1})^2, X_{t-1}, X_{t-2} - Y_{t-2}, (X_{t-2} - Y_{t-2})^2$.'}
+
+res <- estimate.functional(model = probit_linear, 
+                           instruments = c( "X", "lag(X-Y)", "lag(X-Y)^2", 
+                                            "lag(X)", "lag(lag(X-Y))", "lag(lag(X-Y))^2"),
+                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+summary(res)
+plot(res,hline = TRUE)
+```
+
+
+We observe similar results to the main specification in the paper: The test of overidentifying restrictions does not reject optimality, strong evidence of overshooting in times of high expected growth and weak evidence of undershootin in times of low expected growth.
+
+## Different specification models
+
+In this section, we want to allow for other specification models as the linear model with probit link.
+
+First, we consider splines in the state variable. We limit our analysis to quadratic and cubic splines. As the spline models have more parameters, we use again the high dimensional instrumental vector from the simulation setting.
+
+
+
+```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a quadratic and a cubic spline model (with probit link) that depends on the current forecast.'}
+
+res_quadratic <- estimate.functional(model = probit_spline2,  
+                           instruments = c( "X", "lag(X-Y)", "lag(X-Y)^2", 
+                                            "lag(X)", "lag(lag(X-Y))", "lag(lag(X-Y))^2"),
+                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+summary(res_quadratic)
+
+res_cubic <- estimate.functional(model = probit_spline3,  
+                           instruments = c( "X", "lag(X-Y)", "lag(X-Y)^2", 
+                                            "lag(X)", "lag(lag(X-Y))", "lag(lag(X-Y))^2"),
+                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+summary(res_cubic)
+
+
+plot(res_quadratic,hline = TRUE)
+plot(res_cubic,hline = TRUE)
+```
+
+The specification models include the linear model as a special case. Hence, it is without suprise that the optimality tests are passed in this case, too. Again we observe that the results are largely in line with the main analysis in the paper in that there is strong evidence for overshooting in times of high expected growth and weaker evidence in times of low growth (or recession). The large confidence bands for more extreme forecasts indicate that the linear model arguably is overly confident for those areas for its strong parametric assumption.
+
+
+## Different state variables
+
+In this section, we use another typical state variable, namely the lagged value of the observation $Y_{t-1}$.
+
+
+
+```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit) link that depends on the lagged observation.'}
+
+res <- estimate.functional(model = probit_linear,
+                           state = lag(GDP$observation), Y=GDP$observation,X=GDP$forecast)
+summary(res)
+#plot(res,hline = TRUE)
+```
+
+In this case, the optimality of the forecast is rejected with a p-value of `r round(summary(res$gmm)$stest$test[2],digits=2)`. That is the assumption that the forecast is generate as state-dependent quantile does not seem to hold:
+
+$$X_t = q_{m(Y_{t-1},\theta)}(Y_t|\mathcal{F}_t).$$
+In particular, this also rejects the subcase that the forecast is simply a optimal quantile forecast for any level.
+
+
+

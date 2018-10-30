@@ -60,6 +60,21 @@ probit_linear <- function(stateVariable, theta)
   return(stats::pnorm(stateVariable*theta[2]+theta[1]))
 }
 
+#' break specification model with probit link
+#'
+#' @param stateVariable state variable
+#' @param theta parameter
+#'
+#' @return numeric level
+#' @export
+probit_break <- function(stateVariable, theta)
+{
+  if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit break model")}
+
+  return(stats::pnorm((stateVariable>0)*theta[2]+(stateVariable <= 0)*theta[1]))
+}
+
+
 
 
 #' cubic spline specification model with probit link
@@ -204,7 +219,7 @@ estimate.functional <- function(iden.fct = quantiles,
                 {theta0 <- rep(0,3)}
     else {if(sum(sapply(c(probit_spline3), identical, model))>0)
                 {theta0 <- rep(0,4)}
-    else {if(sum(sapply(c(probit_linear,logistic_linear, spline2), identical, model))>0)
+    else {if(sum(sapply(c(probit_linear,logistic_linear), identical, model))>0)
                 {theta0 <- c(0,0)} else {stop("Model unknown, specify theta0.")}}}}
   }
 
