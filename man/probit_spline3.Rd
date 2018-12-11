@@ -4,7 +4,7 @@
 \alias{probit_spline3}
 \title{cubic spline specification model with probit link}
 \usage{
-probit_spline3(stateVariable, theta)
+probit_spline3(stateVariable, theta, ...)
 }
 \arguments{
 \item{stateVariable}{state variable}

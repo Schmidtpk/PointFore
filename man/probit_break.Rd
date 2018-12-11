@@ -4,7 +4,7 @@
 \alias{probit_break}
 \title{break specification model with probit link}
 \usage{
-probit_break(stateVariable, theta)
+probit_break(stateVariable, theta, ...)
 }
 \arguments{
 \item{stateVariable}{state variable}

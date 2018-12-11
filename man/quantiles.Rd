@@ -4,7 +4,7 @@
 \alias{quantiles}
 \title{Identification function for state-dependent quantiles}
 \usage{
-quantiles(x, y, stateVariable, theta, model)
+quantiles(x, y, stateVariable, theta, model, ...)
 }
 \arguments{
 \item{x}{forecast}

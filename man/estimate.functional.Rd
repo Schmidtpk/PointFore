@@ -6,7 +6,7 @@
 \usage{
 estimate.functional(iden.fct = quantiles, model = constant, theta0 = NULL,
   Y, X, stateVariable = NULL, other_data = NULL, instruments = c("X",
-  "lag(Y)"), prewhite = F, ...)
+  "lag(Y)"), prewhite = F, kernel = "Bartlett", bw = bwNeweyWest1987, ...)
 }
 \arguments{
 \item{iden.fct}{identification function. Standard choice is quantiles. Alternative is expectiles.}
@@ -27,6 +27,10 @@ estimate.functional(iden.fct = quantiles, model = constant, theta0 = NULL,
 
 \item{prewhite}{logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
 If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (see ?gmm)}
+
+\item{kernel}{choose kernel for HAC-covariance estimation (see ?gmm). Standard is "Bartlett" Kernel as proposed in Newey and West (1987).}
+
+\item{bw}{function describing bandwidth selection (see ?gmm for alternatives). Standard is that the bandwidth depends on the sample length $T$ by $m(T)=1^\frac{1}{5}$.}
 
 \item{...}{other parameters for gmm function (see ?gmm)}
 }

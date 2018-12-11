@@ -2,11 +2,13 @@
 
 S3method(plot,pointfore)
 S3method(summary,pointfore)
+export(bwNeweyWest1987)
 export(constant)
 export(estimate.functional)
 export(expectiles)
 export(lag)
 export(logistic_linear)
+export(probit_break)
 export(probit_linear)
 export(probit_spline2)
 export(probit_spline3)

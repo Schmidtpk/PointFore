@@ -4,7 +4,7 @@
 \alias{constant}
 \title{Constant specification model}
 \usage{
-constant(stateVariable, theta)
+constant(stateVariable, theta, ...)
 }
 \arguments{
 \item{stateVariable}{state variable}

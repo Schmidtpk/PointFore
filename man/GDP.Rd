@@ -6,8 +6,9 @@
 \title{real GDP realized values and one quarter ahead Greenbook forecasts (1969-2012)}
 \format{A data frame with 176 rows and 2 variables:
 \itemize{
-  \item observation: realized GDP growth rate in percentage measured at second vintage (-4.7 -- 8.5)
-  \item forecast: according point forecast issued one quarter before (-10.4 -- 11.2)
+  \item observation: realized GDP growth rate in percentage measured at second vintage (-10.4 -- 11.2)
+  \item forecast: according point forecast issued one quarter before (-4.7 -- 8.5)
+  \item forecast_late: according point forecast issued latest in the quarter before (-4.7 -- 7.9)
 }}
 \source{
 \url{https://www.philadelphiafed.org/research-and-data/real-time-center/greenbook-data/philadelphia-data-set}
@@ -18,5 +19,6 @@ GDP
 \description{
 A dataset containing real GDP growth rate in the United States and according one quarter ahead point forecasts from Federal Reserve's Greenbook.
 The forecasts were selected to be closest to the middle of the respective quarter among the published Greenbook forecasts of one quarter.
+The forecasts issued latest in the respective quarter are also given under forecast_late.
 }
 \keyword{datasets}

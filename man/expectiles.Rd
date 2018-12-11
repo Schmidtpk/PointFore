@@ -4,7 +4,7 @@
 \alias{expectiles}
 \title{Identification function for state-dependent expectiles}
 \usage{
-expectiles(x, y, stateVariable, theta, model)
+expectiles(x, y, stateVariable, theta, model, ...)
 }
 \arguments{
 \item{x}{forecast}

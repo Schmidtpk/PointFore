@@ -4,7 +4,7 @@
 \alias{logistic_linear}
 \title{logistic-linear specification model}
 \usage{
-logistic_linear(stateVariable, theta)
+logistic_linear(stateVariable, theta, ...)
 }
 \arguments{
 \item{stateVariable}{state variable}

@@ -4,7 +4,7 @@
 \alias{probit_linear}
 \title{linear specification model with probit link}
 \usage{
-probit_linear(stateVariable, theta)
+probit_linear(stateVariable, theta, ...)
 }
 \arguments{
 \item{stateVariable}{state variable}
