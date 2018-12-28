@@ -328,7 +328,7 @@ summary.pointfore <- function(object,...)
 #' @param x object
 #' @param ...
 #'
-#' @return
+#' @return returns the selected bandwidth parameter
 #' @export
 bwNeweyWest1987 <- function(x,...) {
   sandwich::bwNeweyWest(x,lag=nrow(estfun.gmmFct(x))^(0.2),...)
