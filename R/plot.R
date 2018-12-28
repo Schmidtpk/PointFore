@@ -21,7 +21,7 @@
 #' model=logistic,theta0=c(0,0),
 #' stateVariable = lag(GDP$observation))
 #' plot(res)
-plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=NULL, adjust.factor=1, limits=NULL,...)
+plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=TRUE, adjust.factor=1, limits=NULL,...)
 {
 
   ..scaled.. <- NULL
