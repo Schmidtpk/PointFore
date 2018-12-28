@@ -73,13 +73,13 @@ The results imply an expectile level close to 0.5.
 
 In a second step, we estimate a **state-dependent expectile** model, where the level of the expectile can depend on the current forecast.
 
-The *logistic* model is already implemented in the *PointFore* package. The level of the forecast depends on the the state variable s, via the formula
+The *linear probit* model is already implemented in the *PointFore* package. The level of the forecast depends on the the state variable s, via the formula
 
 $$ level = inv.logit(\theta_1 + s \theta_2)= (1+exp(\theta_1 + s \theta_2)^{-1})^{-1}. $$.
 
 ```{r}
 res.flexible <- estimate.functional(iden.fct = expectiles,
-                                    model = logistic,
+                                    model = probit_linear,
                                     Y = Y,X = X,
                                     theta0 = c(0,0),
                                     stateVariable = X)
@@ -112,7 +112,7 @@ linearHypothesis(res.const$gmm,"Theta[1]=0.5")
 ```
 
 
-Similarly, the flexible logistic model cannot reject the mean-forecast ($H_0: \theta_1=0 \wedge \theta_2 =0$), nor state-independence($H_0: \theta_2 =0$).
+Similarly, the flexible linear probit model cannot reject the mean-forecast ($H_0: \theta_1=0 \wedge \theta_2 =0$), nor state-independence($H_0: \theta_2 =0$).
 
 ```{r}
 linearHypothesis(res.flexible$gmm,c("Theta[1]=0", "Theta[2]=0"))
@@ -170,40 +170,40 @@ summary(res.break)
 plot(res.break)
 ```
 
-A bias that can also be detected by the logistic model, which has a similar shape.
+A bias that can also be detected by the linear probit model, which has a similar shape.
 
 ```{r}
-res.logistic <- estimate.functional(iden.fct = expectiles,
-                                    model = logistic,
+res.flexible <- estimate.functional(iden.fct = expectiles,
+                                    model = probit_linear,
                                     Y = Y,X = X,
                                     theta0 = c(0,0),
                                     stateVariable = X)
 
-summary(res.logistic)
+summary(res.flexible)
 
-plot(res.logistic)
+plot(res.flexible)
 ```
 
 
 # Applying non-standard instruments
 
-However, the biased forecast is **not optimal with respect to the logistic model**. The deviation can be detected by the J-test of overidentifying restrictions if we use appropriate instruments, that generate a sufficiently rich information set to test for.
+However, the biased forecast is **not optimal with respect to the linear probit model**. The deviation can be detected by the J-test of overidentifying restrictions if we use appropriate instruments, that generate a sufficiently rich information set to test for.
 
-If we include the squared forecast with its original sign in the instruments, the test rejects optimality with respect to the logistic model with a p-value below 0.01 and correctly cannot reject optimality with respect to the break model with a p-value of 0.09.
+If we include the squared forecast with its original sign in the instruments, the test rejects optimality with respect to the linear probit model with a p-value below 0.05 and correctly cannot reject optimality with respect to the break model with a p-value of 0.11.
 
 
 ```{r}
-res.logistic <- estimate.functional(iden.fct = expectiles,
-                                    model = logistic,
+res.flexible <- estimate.functional(iden.fct = expectiles,
+                                    model = probit_linear,
                                     Y = Y,X = X,
                                     theta0 = c(0,0),
                                     instruments = c("lag(Y)","X","sign(X)*X^2"),
                                     stateVariable = X)
 
-summary(res.logistic)$Jtest
+summary(res.flexible)$Jtest
 
 res.break <- estimate.functional(iden.fct = expectiles,
-                                    model = break_model,
+                                    model = probit_break,
                                     Y = Y,X = X,
                                     theta0 = c(0,0),
                                     instruments = c("lag(Y)","X","sign(X)*X^2"),
