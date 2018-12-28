@@ -36,11 +36,11 @@ This is a basic example which shows you how to evaluate which quantile is foreca
 ```{r example}
 library(PointFore)
 
-res <- estimate.functional(Y=GDP[,1],X=GDP[,2])
+res <- estimate.functional(Y=GDP$observation,X=GDP$forecast)
 
 summary(res)
 
-#plot(res)
+plot(res)
 ```
 
 On average the forecast is over-optimistic with a forecasted quantile of `r round(res$gmm$coefficients[1],digits=2)`. The J-test rejects optimality for this model.
@@ -56,32 +56,6 @@ res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 
 summary(res)
 plot(res)
-# 
-#plot(res,
-#     pdf=FALSE,
-#     conf.levels = c(0.6,0.9))
 ```
 
 We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of `r round(summary(res$gmm)$stest$test[2],digits=3)` in the J-Test of overidentifying restrictions.
-
-
-
-As a robustness check, we apply a more general model, where the forecasted quantile depends on the current forecast via a cubic spline probit model. As the cubic spline model has 4 free parameters, we choose additional instruments.
-
-```{r example with state-dependence spline extension}
-res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
-                           model=probit_spline3,
-                           instruments = c("lag(Y)","X","X^2","X^3","lag(X-Y)^2"),
-                           stateVariable = GDP$forecast)
-
-
-
-
-summary(res)
-
-#plot(res,
-#     pdf=FALSE,
-#     conf.levels = c(0.6,0.9))
-```
-
-Again, we see that the forecast is overly optimistic in times of high growth. This models p-value in the J-Test of overidentifying restrictions is also unable to reject optimality with a value of  `r round(summary(res$gmm)$stest$test[2],digits=3)` .

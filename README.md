@@ -32,58 +32,62 @@ library(PointFore)
 #> 
 #>     lag
 
-res <- estimate.functional(Y=GDP[,1],X=GDP[,2])
+res <- estimate.functional(Y=GDP$observation,X=GDP$forecast)
 #> Drop  1 case(s) because of chosen instruments
+#> Choose parameter theta0 automatically.
 
 summary(res)
 #> $call
-#> estimate.functional(Y = GDP[, 1], X = GDP[, 2])
+#> estimate.functional(Y = GDP$observation, X = GDP$forecast)
 #> 
 #> $coefficients
-#>          Estimate Std. Error  t value     Pr(>|t|)
-#> Theta[1] 0.600349  0.0391736 15.32534 5.177899e-53
+#>           Estimate Std. Error  t value     Pr(>|t|)
+#> Theta[1] 0.5980637 0.04429534 13.50173 1.527435e-41
 #> 
 #> $Jtest
 #> 
 #>  ##  J-Test: degrees of freedom is 2  ## 
 #> 
 #>                 J-test    P-value 
-#> Test E(g)=0:    6.356318  0.041662
+#> Test E(g)=0:    5.507506  0.063688
 
-#plot(res)
+plot(res)
 ```
+
+![](README-example-1.png)
 
 On average the forecast is over-optimistic with a forecasted quantile of 0.6. The J-test rejects optimality for this model.
 
-In the next step, we apply a more general model, where the forecasted quantile depends on the current forecast via a logistic model.
+In the next step, we apply a more general model, where the forecasted quantile depends on the current forecast via a linear probit model.
 
 ``` r
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
-                           model=logistic,
-                           theta0=c(0,0),
+                           model=probit_linear,
                            stateVariable = GDP$forecast)
 #> Drop  1 case(s) because of chosen instruments
+#> Choose parameter theta0 automatically.
+
+
 
 summary(res)
 #> $call
-#> estimate.functional(model = logistic, theta0 = c(0, 0), Y = GDP$observation, 
+#> estimate.functional(model = probit_linear, Y = GDP$observation, 
 #>     X = GDP$forecast, stateVariable = GDP$forecast)
 #> 
 #> $coefficients
 #>            Estimate Std. Error    t value   Pr(>|t|)
-#> Theta[1] -0.1674806 0.27118217 -0.6175945 0.53684265
-#> Theta[2]  0.1770935 0.07208819  2.4566229 0.01402498
+#> Theta[1] -0.1125011 0.16807744 -0.6693408 0.50327812
+#> Theta[2]  0.1132529 0.04437854  2.5519745 0.01071144
 #> 
 #> $Jtest
 #> 
 #>  ##  J-Test: degrees of freedom is 1  ## 
 #> 
 #>                 J-test   P-value
-#> Test E(g)=0:    1.12177  0.28954
-
-#plot(res,
-#     pdf=FALSE,
-#     conf.levels = c(0.6,0.9))
+#> Test E(g)=0:    1.38747  0.23883
+plot(res)
 ```
 
-We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of 0.29 in the J-Test of overidentifying restrictions.
+![](README-example%20with%20state-dependence-1.png)
+
+We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of 0.239 in the J-Test of overidentifying restrictions.
