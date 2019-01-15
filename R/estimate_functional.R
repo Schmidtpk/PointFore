@@ -157,33 +157,41 @@ estimate.functional <- function(iden.fct = quantiles,
   #if character, construct as described
   if(class(instruments)=='character')
   {
+
       #start with constant
       w <- rep(1,length(Y))
 
-      #define dataframe
-      if(is.null(other_data))
-        other_data <- data.frame(X=X,Y=Y)
-      else
-        other_data <- cbind(data.frame(X=X,Y=Y),other_data)
-
-      #construct row for each instrument
-      for(inst_cur in instruments)
+      #add further instruments if const is not only value
+      if(!(length(instruments)==1 & grepl("const",instruments[1])))
       {
 
-        if(grepl("Y",inst_cur) & !grepl("lag",inst_cur))
-          warning("Y without lags is not a valid instrument as it is not in the information set of the forecaster.")
+        #define dataframe
+        if(is.null(other_data))
+          other_data <- data.frame(X=X,Y=Y)
+        else
+          other_data <- cbind(data.frame(X=X,Y=Y),other_data)
 
-        #add instrument
-        w <- cbind(w,eval(parse(text=inst_cur),other_data))
+        #construct row for each instrument
+        for(inst_cur in instruments)
+        {
+
+          if(grepl("Y",inst_cur) & !grepl("lag",inst_cur))
+            warning("Y without lags is not a valid instrument as it is not in the information set of the forecaster.")
+
+          #add instrument
+          w <- cbind(w,eval(parse(text=inst_cur),other_data))
+        }
+
+        #keep only complete cases
+        compl <- complete.cases(w)
+        message(paste("Drop ", length(Y)-sum(compl), "case(s) because of chosen instruments"))
+        w <- w[compl,]
+        Y <- Y[compl]
+        X <- X[compl]
+        stateVariable <- stateVariable[compl]
+
       }
 
-      #keep only complete cases
-      compl <- complete.cases(w)
-      message(paste("Drop ", length(Y)-sum(compl), "case(s) because of chosen instruments"))
-      w <- w[compl,]
-      Y <- Y[compl]
-      X <- X[compl]
-      stateVariable <- stateVariable[compl]
 
   } else if(class(instruments)%in% c("vector","matrix"))
     { # use instrument data as given
@@ -204,12 +212,21 @@ estimate.functional <- function(iden.fct = quantiles,
 
   ### Checks
 
-  if(dim(w)[1]!=length(Y) | dim(w)[1]!=length(X)){stop('Wrong dimensions')}
-  if(dim(w)[1]<length(theta0)){stop('Not enough moment conditions')}
+  if(is.matrix(w))
+  {
+    if(dim(w)[1]!=length(Y) | dim(w)[1]!=length(X)){stop('Wrong dimensions')}
+    if(dim(w)[1]<length(theta0)){stop('Not enough moment conditions')}
 
-  #check if matrix invertible
-  if(qr(w)$rank!=ncol(w))
-    stop("Matrix of instruments does not have full rank. Choice of instruments may be invalid.")
+    #check if matrix invertible
+    if(qr(w)$rank!=ncol(w))
+      stop("Matrix of instruments does not have full rank. Choice of instruments may be invalid.")
+
+  } else
+  {
+    if(length(theta0)>1)
+      stop("Not enough moment conditions")
+  }
+
 
   #choose theta0 automatically if not given
   if(is.null(theta0))
