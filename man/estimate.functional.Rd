@@ -23,7 +23,7 @@ estimate.functional(iden.fct = quantiles, model = constant, theta0 = NULL,
 
 \item{other_data}{optional for construction of instruments}
 
-\item{instruments}{instruments (list of character describing instruments or matrix of actual intsruments)}
+\item{instruments}{instruments (list of character describing instruments or matrix of actual intsruments). Use "const" for just the constant as instrument. Standard ist c("X","lag(Y)"), which uses the constant, the forecast and the lagged value of the outcome.}
 
 \item{prewhite}{logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
 If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (see ?gmm)}
