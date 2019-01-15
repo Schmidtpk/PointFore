@@ -126,21 +126,15 @@ probit_spline2 <- function(stateVariable, theta,...)
 #' @param prewhite logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
 #' If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (see ?gmm)
 #' @param kernel choose kernel for HAC-covariance estimation (see ?gmm). Standard is "Bartlett" Kernel as proposed in Newey and West (1987).
-#' @param bw function describing bandwidth selection (see ?gmm for alternatives). Standard is that the bandwidth depends on the sample length $T$ by $m(T)=1^\frac{1}{5}$.
+#' @param bw function describing bandwidth selection (see ?gmm for alternatives). Standard is that the bandwidth depends on the sample length $T$ by $m(T)=T^{1/5}$.
 #' @param ... other parameters for gmm function (see ?gmm)
 #'
 #' @return Object of type pointfore
 #' @export
 #'
 #' @examples
-#' estimate.functional(Y=GDP$observation,X=GDP$forecast)
 #' estimate.functional(Y=GDP$observation,X=GDP$forecast,
 #' instruments=c("X","lag(Y)"))
-#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
-#' other_data = data.frame(Z=GDP$forecast),
-#' instruments=c("Z","lag(Y)"))
-#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
-#' model=logistic,theta0=c(0,0),stateVariable = GDP$forecast)
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = NULL,
@@ -340,7 +334,7 @@ summary.pointfore <- function(object,...)
 #' Bandwidth as in Newey and West 1987
 #'
 #' Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987).
-#' Applies bandwidth that includes lags accroding to $m(T)=T^\frac{1}{5}$.
+#' Applies bandwidth that includes lags accroding to $m(T)=T^{1/5}$.
 #'
 #' @param x object
 #' @param ...
