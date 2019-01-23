@@ -40,7 +40,7 @@ res <- estimate.functional(Y=GDP$observation,X=GDP$forecast)
 
 summary(res)
 
-plot(res)
+#plot(res)
 ```
 
 On average the forecast is over-optimistic with a forecasted quantile of `r round(res$gmm$coefficients[1],digits=2)`. The J-test rejects optimality for this model.
@@ -55,7 +55,7 @@ res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 
 
 summary(res)
-plot(res)
+#plot(res)
 ```
 
 We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of `r round(summary(res$gmm)$stest$test[2],digits=3)` in the J-Test of overidentifying restrictions.

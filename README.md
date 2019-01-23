@@ -51,10 +51,8 @@ summary(res)
 #>                 J-test    P-value 
 #> Test E(g)=0:    5.507506  0.063688
 
-plot(res)
+#plot(res)
 ```
-
-![](README-example-1.png)
 
 On average the forecast is over-optimistic with a forecasted quantile of 0.6. The J-test rejects optimality for this model.
 
@@ -85,9 +83,7 @@ summary(res)
 #> 
 #>                 J-test   P-value
 #> Test E(g)=0:    1.38747  0.23883
-plot(res)
+#plot(res)
 ```
-
-![](README-example%20with%20state-dependence-1.png)
 
 We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of 0.239 in the J-Test of overidentifying restrictions.
