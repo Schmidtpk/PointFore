@@ -9,12 +9,12 @@ bwNeweyWest1987(x, ...)
 \arguments{
 \item{x}{object}
 
-\item{...}{}
+\item{...}{...}
 }
 \value{
 returns the selected bandwidth parameter
 }
 \description{
 Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987).
-Applies bandwidth that includes lags accroding to $m(T)=T^\frac{1}{5}$.
+Applies bandwidth that includes lags accroding to $m(T)=T^{1/5}$.
 }

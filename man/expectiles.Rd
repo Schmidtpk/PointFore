@@ -16,6 +16,8 @@ expectiles(x, y, stateVariable, theta, model, ...)
 \item{theta}{model parameter to be estimated}
 
 \item{model}{model function}
+
+\item{...}{...}
 }
 \description{
 Identification function for state-dependent expectiles

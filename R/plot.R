@@ -18,8 +18,8 @@
 #'
 #' @examples
 #' res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
-#' model=logistic,theta0=c(0,0),
-#' stateVariable = lag(GDP$observation))
+#' model=probit_linear,
+#' stateVariable = lag(GDP$forecast))
 #' plot(res)
 plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=TRUE, adjust.factor=1, limits=NULL,...)
 {

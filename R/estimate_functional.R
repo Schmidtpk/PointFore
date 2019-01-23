@@ -21,6 +21,7 @@ lag <- function(vector, lag=1)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... ...
 #'
 #' @return numeric level
 #' @export
@@ -35,6 +36,7 @@ constant <- function(stateVariable, theta,...)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... ...
 #'
 #' @return numeric level
 #' @export
@@ -50,6 +52,7 @@ logistic_linear <- function(stateVariable, theta,...)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... other parameters
 #'
 #' @return numeric level
 #' @export
@@ -64,6 +67,7 @@ probit_linear <- function(stateVariable, theta,...)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... ...
 #'
 #' @return numeric level
 #' @export
@@ -81,6 +85,7 @@ probit_break <- function(stateVariable, theta,...)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... ...
 #'
 #' @return numeric level
 #' @export
@@ -98,6 +103,7 @@ probit_spline3 <- function(stateVariable, theta,...)
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
+#' @param ... ...
 #'
 #' @return numeric level
 #' @export
@@ -297,6 +303,7 @@ estimate.functional <- function(iden.fct = quantiles,
 #' @param stateVariable state variable
 #' @param theta model parameter to be estimated
 #' @param model model function
+#' @param ... ...
 #'
 #' @export
 quantiles<- function(x,y,stateVariable,theta,model,...)
@@ -312,6 +319,7 @@ quantiles<- function(x,y,stateVariable,theta,model,...)
 #' @param stateVariable state variable
 #' @param theta model parameter to be estimated
 #' @param model model function
+#' @param ... ...
 #'
 #' @export
 expectiles<- function(x,y,stateVariable,theta,model,...)
@@ -337,12 +345,12 @@ summary.pointfore <- function(object,...)
 #' Applies bandwidth that includes lags accroding to $m(T)=T^{1/5}$.
 #'
 #' @param x object
-#' @param ...
+#' @param ... ...
 #'
 #' @return returns the selected bandwidth parameter
 #' @export
 bwNeweyWest1987 <- function(x,...) {
-  sandwich::bwNeweyWest(x,lag=nrow(estfun.gmmFct(x))^(0.2),...)
+  sandwich::bwNeweyWest(x,lag=nrow(gmm::estfun.gmmFct(x))^(0.2),...)
 }
 
 

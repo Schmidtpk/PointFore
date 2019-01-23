@@ -10,6 +10,8 @@ probit_linear(stateVariable, theta, ...)
 \item{stateVariable}{state variable}
 
 \item{theta}{parameter}
+
+\item{...}{other parameters}
 }
 \value{
 numeric level

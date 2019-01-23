@@ -10,6 +10,8 @@ probit_spline2(stateVariable, theta, ...)
 \item{stateVariable}{state variable}
 
 \item{theta}{parameter}
+
+\item{...}{...}
 }
 \value{
 numeric level

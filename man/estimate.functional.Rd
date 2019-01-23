@@ -31,7 +31,7 @@ If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (
 
 \item{kernel}{choose kernel for HAC-covariance estimation (see ?gmm). Standard is "Bartlett" Kernel as proposed in Newey and West (1987).}
 
-\item{bw}{function describing bandwidth selection (see ?gmm for alternatives). Standard is that the bandwidth depends on the sample length $T$ by $m(T)=1^\frac{1}{5}$.}
+\item{bw}{function describing bandwidth selection (see ?gmm for alternatives). Standard is that the bandwidth depends on the sample length $T$ by $m(T)=T^{1/5}$.}
 
 \item{...}{other parameters for gmm function (see ?gmm)}
 }
@@ -42,12 +42,6 @@ Object of type pointfore
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
 }
 \examples{
-estimate.functional(Y=GDP$observation,X=GDP$forecast)
 estimate.functional(Y=GDP$observation,X=GDP$forecast,
 instruments=c("X","lag(Y)"))
-estimate.functional(Y=GDP$observation,X=GDP$forecast,
-other_data = data.frame(Z=GDP$forecast),
-instruments=c("Z","lag(Y)"))
-estimate.functional(Y=GDP$observation,X=GDP$forecast,
-model=logistic,theta0=c(0,0),stateVariable = GDP$forecast)
 }

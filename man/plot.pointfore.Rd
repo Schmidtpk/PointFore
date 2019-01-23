@@ -30,7 +30,7 @@ Plots object of class "pointfore"
 }
 \examples{
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
-model=logistic,theta0=c(0,0),
-stateVariable = lag(GDP$observation))
+model=probit_linear,
+stateVariable = lag(GDP$forecast))
 plot(res)
 }
