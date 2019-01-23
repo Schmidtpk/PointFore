@@ -1,7 +1,7 @@
 Package: PointFore
 Type: Package
 Title: Interpretation of point forecasts as state-dependent quantiles and expectiles
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Patrick", "Schmidt", email = "pschmidte@gmail.com", role = c("aut", "cre"))
 Description: Estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.
   Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
