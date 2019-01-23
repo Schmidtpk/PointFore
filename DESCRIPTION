@@ -1,13 +1,13 @@
 Package: PointFore
 Type: Package
-Title: Interpretation of point forecasts as state-dependent quantiles and expectiles
+Title: Interpretation of Point Forecasts as State-Dependent Quantiles and Expectiles
 Version: 0.2.0
 Authors@R: person("Patrick", "Schmidt", email = "pschmidte@gmail.com", role = c("aut", "cre"))
 Description: Estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.
   Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
-  The package contains daily accumulated precipitation at London, UK from the high-resolution model of the
-  European Centre for Medium-Range Weather Forecasts (ECMWF, <https://www.ecmwf.int/>).
-  Based on "Interpretation of Point Forecasts" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting.
+  The package contains two data sets with forecasts and realisations: the daily accumulated precipitation at London, UK from the high-resolution model of the
+  European Centre for Medium-Range Weather Forecasts (ECMWF, <https://www.ecmwf.int/>) and GDP growth Greenbook data by the US Federal Reserve.
+  Based on "Interpretation of Point Forecasts with unknown directive" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting.
 License: CC0
 Imports: 
     gmm,

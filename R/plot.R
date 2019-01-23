@@ -103,7 +103,6 @@ plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=TRUE, ad
     if(is.logical(hline))
       if(isTRUE(hline))
         hline<-.5
-      else next
 
     p.quantile <- p.quantile + ggplot2::geom_hline(yintercept = hline,linetype=2)
   }
