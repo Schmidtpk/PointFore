@@ -18,7 +18,7 @@ The goal of PointFore is to estimate specification models for the state-dependen
 
 Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
 
-Based on "Interpretation of Point Forecasts" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
+Based on "Interpretation of Point Forecasts with unknown directive" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
 
 ## Installation
 
