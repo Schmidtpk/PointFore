@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 The goal of PointFore is to estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.
 
-Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
+Wald Tests and the test of overidentifying restrictions are implemented. Plotting of the estimated specification model is possible.
 
 Based on "Interpretation of Point Forecasts with unknown directive" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
 
