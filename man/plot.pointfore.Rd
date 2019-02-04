@@ -29,8 +29,10 @@ plot
 Plots object of class "pointfore"
 }
 \examples{
+#estimate linear probit specification model for quantiles on GDP forecast
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 model=probit_linear,
 stateVariable = lag(GDP$forecast))
+#plot results
 plot(res)
 }

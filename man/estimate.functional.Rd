@@ -40,8 +40,31 @@ Object of type pointfore
 }
 \description{
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
+For additional detail see the vignettes of the PointFore package.
 }
 \examples{
-estimate.functional(Y=GDP$observation,X=GDP$forecast,
-instruments=c("X","lag(Y)"))
+# estimate constant quantile level of GDP forecast
+res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+model=constant)
+summary(res)
+plot(res)
+
+# estimate constant quantile level with only the constant as instrument
+res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+model=constant, instruments="const")
+summary(res)
+
+\dontrun{
+# estimate constant expectile level
+res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+model=constant, instruments="const", iden.fct = expectiles)
+summary(res)
+plot(res)
+
+# estimate state-dependent quantile level with linear probit specification model
+res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+stateVariable = GDP$forecast, model = probit_linear)
+summary(res)
+plot(res)
+}
 }

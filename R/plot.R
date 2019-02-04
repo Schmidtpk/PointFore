@@ -17,9 +17,11 @@
 #' @export
 #'
 #' @examples
+#' #estimate linear probit specification model for quantiles on GDP forecast
 #' res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 #' model=probit_linear,
 #' stateVariable = lag(GDP$forecast))
+#' #plot results
 #' plot(res)
 plot.pointfore <- function(x, conf.levels = c(0.6,0.9), pdf=TRUE, hline=TRUE, adjust.factor=1, limits=NULL,...)
 {

@@ -17,5 +17,6 @@ probit_spline3(stateVariable, theta, ...)
 numeric level
 }
 \description{
-cubic spline specification model with probit link
+Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+This specification model depends through a cubic spline on the state variable and applies a probit link function.
 }

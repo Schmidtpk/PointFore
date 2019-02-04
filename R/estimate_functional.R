@@ -7,7 +7,10 @@
 #' @export
 #'
 #' @examples
+#' #lag example vector by one lag
 #' lag(c(1,2,3))
+#'
+#' #lag example vector by two lags
 #' lag(c(1,2,3,4),lag=2)
 lag <- function(vector, lag=1)
 {
@@ -19,12 +22,24 @@ lag <- function(vector, lag=1)
 
 #' Constant specification model
 #'
+#' Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+#' The constant specification model returns the parameter theta irrespective of the state variable. If theta is not in the unit interval, the constant specification model returns 0 or 1 (depending on which is closer).
+#'
 #' @param stateVariable state variable
 #' @param theta parameter
 #' @param ... ...
 #'
 #' @return numeric level
 #' @export
+#'
+#' @examples
+#' # the returned level does not depend on the state variable
+#' constant(0,.5)
+#' constant(1,.5)
+#'
+#' # if theta is not in the unit interval, the constant specification model forces it to be so
+#' constant(0, 2)
+#' constant(0, -1)
 constant <- function(stateVariable, theta,...)
 {
   return(min(1,max(theta,0)))
@@ -32,7 +47,11 @@ constant <- function(stateVariable, theta,...)
 
 
 
-#' logistic-linear specification model
+#' linear logistic specification model
+#'
+#' Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+#' The linear logistic specification model depends linear on the state variable with a logistic link function.
+#'
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
@@ -40,6 +59,14 @@ constant <- function(stateVariable, theta,...)
 #'
 #' @return numeric level
 #' @export
+#'
+#' @examples
+#' # plot linear logistic specification model with constant quantile/expectile level
+#' plot(function(x) logistic_linear(x,theta=c(0,0)), xlim=c(-1,1))
+#'
+#'
+#' # plot linear logistic specification model with state-dependent quantile/expectile level
+#' plot(function(x) logistic_linear(x,theta=c(0,5)), xlim=c(-1,1))
 logistic_linear <- function(stateVariable, theta,...)
 {
   if(length(theta)!=2){stop("Wrong dimension of parameter theta for logistic model")}
@@ -50,12 +77,23 @@ logistic_linear <- function(stateVariable, theta,...)
 
 #' linear specification model with probit link
 #'
+#' Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+#' The linear probit specification model depends linear on the state variable with a probit link function.
+#'
 #' @param stateVariable state variable
 #' @param theta parameter
 #' @param ... other parameters
 #'
 #' @return numeric level
 #' @export
+#'
+#' @examples
+#' # plot linear probit specification model with constant quantile/expectile level
+#' plot(function(x) probit_linear(x,theta=c(0,0)), xlim=c(-1,1))
+#'
+#'
+#' # plot linear probit specification model with state-dependent quantile/expectile level
+#' plot(function(x) probit_linear(x,theta=c(0,5)), xlim=c(-1,1))
 probit_linear <- function(stateVariable, theta,...)
 {
   if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit linear model")}
@@ -63,7 +101,11 @@ probit_linear <- function(stateVariable, theta,...)
   return(stats::pnorm(stateVariable*theta[2]+theta[1]))
 }
 
-#' break specification model with probit link
+#' probit break specification model with probit link
+#'
+#' Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+#' The probit break specification model depends has a break at zero and a constant level above and below.
+#' It applies the probit link function.
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
@@ -71,6 +113,14 @@ probit_linear <- function(stateVariable, theta,...)
 #'
 #' @return numeric level
 #' @export
+#'
+#' @examples
+#' # plot break probit specification model with constant quantile/expectile level
+#' plot(function(x) probit_break(x,theta=c(0,0)), xlim=c(-1,1))
+#'
+#'
+#' # plot linear break specification model with state-dependent quantile/expectile level
+#' plot(function(x) probit_break(x,theta=c(0,5)), xlim=c(-1,1))
 probit_break <- function(stateVariable, theta,...)
 {
   if(length(theta)!=2){stop("Wrong dimension of parameter theta for probit break model")}
@@ -82,6 +132,9 @@ probit_break <- function(stateVariable, theta,...)
 
 
 #' cubic spline specification model with probit link
+#'
+#' Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+#' This specification model depends through a cubic spline on the state variable and applies a probit link function.
 #'
 #' @param stateVariable state variable
 #' @param theta parameter
@@ -107,6 +160,10 @@ probit_spline3 <- function(stateVariable, theta,...)
 #'
 #' @return numeric level
 #' @export
+#'
+#' @examples
+#' # plot example of cubic spline specification model with state-dependent quantile/expectile level
+#' plot(function(x) probit_spline3(x,theta=c(0,2,1,-1)), xlim=c(-1,1))
 probit_spline2 <- function(stateVariable, theta,...)
 {
   if(length(theta)!=3){stop("Wrong dimension of parameter theta for quadratic probit model")}
@@ -120,6 +177,7 @@ probit_spline2 <- function(stateVariable, theta,...)
 #' Estimate Functional
 #'
 #' Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
+#' For additional detail see the vignettes of the PointFore package.
 #'
 #' @param iden.fct identification function. Standard choice is quantiles. Alternative is expectiles.
 #' @param model specification model
@@ -139,8 +197,30 @@ probit_spline2 <- function(stateVariable, theta,...)
 #' @export
 #'
 #' @examples
-#' estimate.functional(Y=GDP$observation,X=GDP$forecast,
-#' instruments=c("X","lag(Y)"))
+#' # estimate constant quantile level of GDP forecast
+#' res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+#' model=constant)
+#' summary(res)
+#' plot(res)
+#'
+#' # estimate constant quantile level with only the constant as instrument
+#' res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+#' model=constant, instruments="const")
+#' summary(res)
+#'
+#'\dontrun{
+#' # estimate constant expectile level
+#' res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+#' model=constant, instruments="const", iden.fct = expectiles)
+#' summary(res)
+#' plot(res)
+#'
+#' # estimate state-dependent quantile level with linear probit specification model
+#' res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+#' stateVariable = GDP$forecast, model = probit_linear)
+#' summary(res)
+#' plot(res)
+#' }
 estimate.functional <- function(iden.fct = quantiles,
                                 model = constant,
                                 theta0 = NULL,
@@ -335,13 +415,12 @@ summary.pointfore <- function(object,...)
 
   list(call=object$call,
        coefficients=gmm.sum$coefficients,
-#       vcov=vcov(object$gmm),
        Jtest = gmm.sum$stest)
 }
 
 #' Bandwidth as in Newey and West 1987
 #'
-#' Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987).
+#' Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987) <doi:10.2307/1913610>.
 #' Applies bandwidth that includes lags accroding to $m(T)=T^{1/5}$.
 #'
 #' @param x object

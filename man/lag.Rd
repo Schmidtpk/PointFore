@@ -18,6 +18,9 @@ lagged vector of same length with NAs at beginning
 Lagging variables for use in estimate functional
 }
 \examples{
+#lag example vector by one lag
 lag(c(1,2,3))
+
+#lag example vector by two lags
 lag(c(1,2,3,4),lag=2)
 }

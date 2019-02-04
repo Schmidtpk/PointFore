@@ -15,6 +15,6 @@ bwNeweyWest1987(x, ...)
 returns the selected bandwidth parameter
 }
 \description{
-Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987).
+Used in estimate functional to describe bandwidth selection as proposed in Newey and West (1987) <doi:10.2307/1913610>.
 Applies bandwidth that includes lags accroding to $m(T)=T^{1/5}$.
 }
