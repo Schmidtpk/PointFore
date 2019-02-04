@@ -29,8 +29,13 @@ plot
 Plots object of class "pointfore"
 }
 \examples{
+#estimate linear probit specification model for quantiles on GDP forecast
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 model=probit_linear,
 stateVariable = lag(GDP$forecast))
+#plot results
 plot(res)
+#plot results with different confidence levels, different horizontal line,
+#and without pdf of state variable.
+plot(res,  conf.levels = c(0.8), pdf= FALSE, hline= 0.2)
 }

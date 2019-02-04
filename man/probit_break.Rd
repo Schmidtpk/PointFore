@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_functional.R
 \name{probit_break}
 \alias{probit_break}
-\title{break specification model with probit link}
+\title{probit break specification model with probit link}
 \usage{
 probit_break(stateVariable, theta, ...)
 }
@@ -17,5 +17,15 @@ probit_break(stateVariable, theta, ...)
 numeric level
 }
 \description{
-break specification model with probit link
+Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+The probit break specification model depends has a break at zero and a constant level above and below.
+It applies the probit link function.
+}
+\examples{
+# plot break probit specification model with constant quantile/expectile level
+plot(function(x) probit_break(x,theta=c(0,0)), xlim=c(-1,1))
+
+
+# plot linear break specification model with state-dependent quantile/expectile level
+plot(function(x) probit_break(x,theta=c(0,5)), xlim=c(-1,1))
 }
