@@ -2,7 +2,6 @@
 
 S3method(plot,pointfore)
 S3method(summary,pointfore)
-export(bwNeweyWest1987)
 export(constant)
 export(estimate.functional)
 export(expectiles)

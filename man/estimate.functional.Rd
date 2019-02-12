@@ -10,9 +10,9 @@ estimate.functional(iden.fct = quantiles, model = constant,
   bw = bwNeweyWest1987, ...)
 }
 \arguments{
-\item{iden.fct}{identification function. Standard choice is quantiles. Alternative is expectiles.}
+\item{iden.fct}{identification function. Standard choice is \code{\link{quantiles}}. The alternative is \code{\link{expectiles}}.}
 
-\item{model}{specification model}
+\item{model}{specification model. See \code{\link{constant}} for the simplest example and further suggestions.}
 
 \item{theta0}{starting value for optimization}
 
@@ -24,7 +24,7 @@ estimate.functional(iden.fct = quantiles, model = constant,
 
 \item{other_data}{optional for construction of instruments}
 
-\item{instruments}{instruments (list of character describing instruments or matrix of actual intsruments). Use "const" for just the constant as instrument. Standard ist c("X","lag(Y)"), which uses the constant, the forecast and the lagged value of the outcome.}
+\item{instruments}{instruments (list of character describing instruments or matrix of actual instruments). Use "const" for just the constant as instrument. Standard ist c("X","lag(Y)"), which uses the constant, the forecast and the lagged value of the outcome.}
 
 \item{prewhite}{logical or integer. Should the estimating functions be prewhitened? Standard is FALSE.
 If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (see ?gmm)}
@@ -36,7 +36,7 @@ If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (
 \item{...}{other parameters for gmm function (see ?gmm)}
 }
 \value{
-Object of type pointfore
+Object of type \code{pointfore}. Use \code{summary} and \code{plot} methods to illustrate results.
 }
 \description{
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.
