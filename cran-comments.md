@@ -15,6 +15,6 @@ New submission
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* added arXiv reference to my Description text
+* added examples for all exported functions
 
-* added more small executable examples in my Rd-files
+* refrained from exporting the bwNeweyWest1987 function

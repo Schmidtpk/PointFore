@@ -168,7 +168,7 @@ probit_break <- function(stateVariable, theta,...)
 #'
 #' @examples
 #' # plot example of cubic spline specification model with state-dependent quantile/expectile level
-#' plot(function(x) probit_spline3(x,theta=c(0,2,1,-1)), xlim=c(-2,2))
+#' plot(function(x) probit_spline3(x,theta=c(0,1,1,-1)), xlim=c(-2,2))
 probit_spline3 <- function(stateVariable, theta,...)
 {
   if(length(theta)!=4){stop("Wrong dimension of parameter theta for cubic probit model")}
