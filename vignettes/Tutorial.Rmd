@@ -27,7 +27,7 @@ The PointFore package can be loaded the usual way.
 library(PointFore)
 ```
 
-The main function is *estimate.functional()* which creates an object of class *pointfore*. Many paramters are available but most of them can be set to their default values. They are explained in details below through examples.
+The main function is *estimate.functional()* which creates an object of class *pointfore*. Many parameters are available but most of them can be set to their default values. They are explained in details below through examples.
 
 The function *estimate.functional()* provides a convenient wrapper for the estimation based on the *gmm package*. The main arguments are the *forecast X* and the *realizations Y*. Further, one can choose between *quantiles* and *expectiles* and the model that describes the forecasted level.
 
@@ -99,7 +99,7 @@ plot(res.flexible)
 
 ## Wald tests
 
-It is straigt forward to apply standard Wald tests to the estimated *gmm-object*. First, we have to load the car package.
+It is straight forward to apply standard Wald tests to the estimated *gmm-object*. First, we have to load the car package.
 
 ```{r}
 library(car)
@@ -127,7 +127,7 @@ linearHypothesis(res.flexible$gmm,"Theta[2]=0")
 
 You can also **create your own specification models**, which describe how the levels of the quantile/expectile depend on the state variable.
 
-The two parameters stateVariable and theta are necessary. The output is the level and should always be in the unit interval.
+The two parameters \code{stateVariable} and \code{theta} are necessary. The output is the level and should always be in the unit interval.
 
 ```{r}
 break_model <- function(stateVariable, theta)

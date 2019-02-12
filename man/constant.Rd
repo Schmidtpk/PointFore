@@ -17,8 +17,12 @@ constant(stateVariable, theta, ...)
 numeric level
 }
 \description{
-Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
-The constant specification model returns the parameter theta irrespective of the state variable. If theta is not in the unit interval, the constant specification model returns 0 or 1 (depending on which is closer).
+All specification models can be used as parameter in \code{\link{estimate.functional}}.
+Specification models are used to denote the quantile or expectile level
+(depending on the identifciation function).
+The constant specification model returns the parameter theta irrespective of
+the state variable. If theta is not in the unit interval, the constant specification
+model returns 0 or 1 (depending on which is closer).
 }
 \examples{
 # the returned level does not depend on the state variable
@@ -29,3 +33,10 @@ constant(1,.5)
 constant(0, 2)
 constant(0, -1)
 }
+\seealso{
+Other specification models: \code{\link{logistic_linear}},
+  \code{\link{probit_break}}, \code{\link{probit_linear}},
+  \code{\link{probit_spline2}},
+  \code{\link{probit_spline3}}
+}
+\concept{specification models}

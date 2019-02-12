@@ -205,7 +205,7 @@ plot(res_quadratic,hline = TRUE)
 plot(res_cubic,hline = TRUE)
 ```
 
-The specification models include the linear model as a special case. Hence, it is without suprise that the optimality tests are passed in this case, too. Again we observe that the results are largely in line with the main analysis in the paper in that there is strong evidence for overshooting in times of high expected growth and weaker evidence in times of low growth (or recession). The large confidence bands for more extreme forecasts indicate that the linear model arguably is overly confident for those areas for its strong parametric assumption.
+The specification models include the linear model as a special case. Hence, it is without surprise that the optimality tests are passed in this case, too. Again we observe that the results are largely in line with the main analysis in the paper in that there is strong evidence for overshooting in times of high expected growth and weaker evidence in times of low growth (or recession). The large confidence bands for more extreme forecasts indicate that the linear model arguably is overly confident for those areas for its strong parametric assumption.
 
 
 ## Different state variables

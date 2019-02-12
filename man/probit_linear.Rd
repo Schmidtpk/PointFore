@@ -17,7 +17,9 @@ probit_linear(stateVariable, theta, ...)
 numeric level
 }
 \description{
-Specification models are used to denote the quantile or expectile level (depending on the identifciation function).
+All specification models can be used as parameter in \code{\link{estimate.functional}}.
+Specification models are used to denote the quantile or expectile level
+(depending on the identifciation function).
 The linear probit specification model depends linear on the state variable with a probit link function.
 }
 \examples{
@@ -28,3 +30,10 @@ plot(function(x) probit_linear(x,theta=c(0,0)), xlim=c(-1,1))
 # plot linear probit specification model with state-dependent quantile/expectile level
 plot(function(x) probit_linear(x,theta=c(0,5)), xlim=c(-1,1))
 }
+\seealso{
+Other specification models: \code{\link{constant}},
+  \code{\link{logistic_linear}},
+  \code{\link{probit_break}}, \code{\link{probit_spline2}},
+  \code{\link{probit_spline3}}
+}
+\concept{specification models}

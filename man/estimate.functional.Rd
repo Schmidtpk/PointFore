@@ -10,9 +10,9 @@ estimate.functional(iden.fct = quantiles, model = constant,
   bw = bwNeweyWest1987, ...)
 }
 \arguments{
-\item{iden.fct}{identification function. Standard choice is quantiles. Alternative is expectiles.}
+\item{iden.fct}{identification function. Standard choice is \code{\link{quantiles}}. The alternative is \code{\link{expectiles}}.}
 
-\item{model}{specification model}
+\item{model}{specification model. See \code{\link{constant}} for the simplest example and further suggestions.}
 
 \item{theta0}{starting value for optimization}
 
@@ -36,7 +36,7 @@ If TRUE or greater than 0 a VAR model of order as.integer(prewhite) is fitted. (
 \item{...}{other parameters for gmm function (see ?gmm)}
 }
 \value{
-Object of type pointfore
+Object of type \code{pointfore}. Use \code{summary} and \code{plot} methods to illustrate results.
 }
 \description{
 Estimates the parameter in a specification model for state-dependent quantile or expectile forecasts.

@@ -22,3 +22,17 @@ expectiles(x, y, stateVariable, theta, model, ...)
 \description{
 Identification function for state-dependent expectiles
 }
+\examples{
+## Estimate expectile level for constant specification model with estimate.functional
+
+res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
+model=constant,
+instruments="const",
+iden.fct = expectiles)
+summary(res)
+plot(res)
+}
+\seealso{
+Other identification functions: \code{\link{quantiles}}
+}
+\concept{identification functions}
