@@ -22,7 +22,9 @@
 #' The forecasts issued latest in the respective quarter are also given under forecast_late.
 #' @format A data frame with 176 rows and 2 variables:
 #' \itemize{
-#'   \item observation: realized GDP growth rate in percentage measured at second vintage (-10.4 -- 11.2)
+#'   \item observation: realized GDP growth rate in percentage measured at first vintage (-10.4 -- 11.2)
+#'   \item observation_second: realized GDP growth rate in percentage measured at second vintage (-11.3 -- 13.2)
+#'   \item observation_recent: realized GDP growth rate in percentage measured at most recent vintage (-8.2 -- 16.5)
 #'   \item forecast: according point forecast issued one quarter before (-4.7 -- 8.5)
 #'   \item forecast_late: according point forecast issued latest in the quarter before (-4.7 -- 7.9)
 #' }
