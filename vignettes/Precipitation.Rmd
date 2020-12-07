@@ -46,7 +46,7 @@ Now, let us analyse the forecasts. We begin with the constant expectile model.
 
 ```{r, fig.show='hold', fig.cap = 'Constant expectile analysis.'}
 
-instruments <- c("lag(lag(Y))","X")
+instruments <- c("lag(Y,2)","X")
 
 res <- estimate.functional(iden.fct = expectiles, model = constant,
                            instruments = instruments,

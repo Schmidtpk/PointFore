@@ -93,7 +93,10 @@ First, we replicate the main result from the original paper.
 ```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit) link that depends on the current forecast.'}
 
 res <- estimate.functional(model = probit_linear,
-                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
+                           state = GDP$forecast,
+                           instruments = c("X","lag(Y,2)"),
+                           Y=GDP$observation,
+                           X=GDP$forecast)
 summary(res)
 plot(res,hline = TRUE)
 ```
@@ -109,27 +112,9 @@ $$X_t = q_{\tau}(Y_t|\mathcal{F}_t).$$
 
 ## Different information sets (instrumental vectors)
 
-In the following we apply the same analysis with different instrumental vectors. The standard in the estimate.functional function is c("lag(Y)","X") which signifies that the instruments are given by $$w_t=(1,y_{t-1},x_t)'.$$
+In the following we apply the same analysis with different instrumental vectors. The standard in the estimate.functional function is c("lag(Y,2)","X") which signifies that the instruments are given by $$w_t=(1,y_{t-2},x_t)'.$$
 
-
-As first alternative, we consider only lagged values as instruments. That is the instruments are given by $$w_t=(1,y_{t-1},y_{t-2})'.$$
-
-
-
-```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit link) that depends on the current forecast with instruments $w_t=(1, Y_{t-1}, Y_{t-2})$.'}
-
-res <- estimate.functional(model = probit_linear, instruments = c("lag(Y)","lag(lag(Y))"),
-                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
-summary(res)
-plot(res,hline = TRUE)
-```
-
-
-As argued in the main paper, this choice often lags power against identifying misspecified models. And indeed, we observe large confidence bands and a high p-value indicating that the model fits well. Arguably this is because the instruments generate a rather limited information set, such that forecast optimality with respect to this limited information set is a weak requirement.
-
-
-As second alternative, we consider that the lagged outcome $Y_{t-1}$ may not be in the information set of the forecast. As instruments we use just the forecasts $$W_t = \left( 1, X_t, X_{t-1} \right)'  '.$$
-
+As first alternative, we consider that the lagged outcome $Y_{t-1}$ may not be in the information set of the forecast. As instruments we use just the forecasts $$W_t = \left( 1, X_t, X_{t-1} \right)'  '.$$
 
 
 ```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit link) that depends on the current forecast with instruments $w_t=(1, X_t, X_{t-1})$.'}
@@ -144,24 +129,8 @@ plot(res,hline = TRUE)
 
 We observe similar results to the main specification in the paper: The test of overidentifying restrictions does not reject optimality, strong evidence of overshooting in times of high expected growth and weak evidence of undershootin in times of low expected growth.
 
-As third alternative, we consider the instrument $$W_t = \left( 1, X_t, Y_{t-2} \right).$$
 
-
-```{r, fig.show='hold', fig.cap = 'State-dependent quantile analysis with a linear model (with probit link) that depends on the current forecast with instruments $w_t=(1, X_t, Y_{t-2})$.'}
-
-res <- estimate.functional(model = probit_linear, 
-                           instruments = c( "X", "lag(lag(Y))"),
-                           state = GDP$forecast, Y=GDP$observation,X=GDP$forecast)
-summary(res)
-plot(res,hline = TRUE)
-```
-
-
-We observe similar results to the main specification in the paper: The test of overidentifying restrictions does not reject optimality, strong evidence of overshooting in times of high expected growth and weak evidence of undershootin in times of low expected growth.
-
-
-
-Finally, we consider the larger set of instruments used in the other simulation study in the main paper. That is the instruments are given by $$W_t = \left( 1, X_t, X_{t-1} - Y_{t-1}, (X_{t-1} - Y_{t-1})^2, X_{t-1}, X_{t-2} - Y_{t-2}, (X_{t-2} - Y_{t-2})^2 \right)'  '.$$
+Finally, we consider the larger set of instruments. That is the instruments are given by $$W_t = \left( 1, X_t, X_{t-1} - Y_{t-1}, (X_{t-1} - Y_{t-1})^2, X_{t-1}, X_{t-2} - Y_{t-2}, (X_{t-2} - Y_{t-2})^2 \right)'  '.$$
 
 
 
