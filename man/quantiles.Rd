@@ -35,6 +35,7 @@ mean(quantiles(x,y,0,0.6,constant))
 mean(quantiles(x,y,0,0.5, constant))
 }
 \seealso{
-Other identification functions: \code{\link{expectiles}}
+Other identification functions: 
+\code{\link{expectiles}()}
 }
 \concept{identification functions}

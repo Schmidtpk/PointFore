@@ -28,6 +28,6 @@ res <- estimate.functional(Y=GDP$observation, X=GDP$forecast,
 model=constant,
 instruments="const")
 
-# ...which can be summarized with the \\code{summary} function.
+# ...which can be summarized with the \code{summary} function.
 summary(res)
 }

@@ -4,10 +4,20 @@
 \alias{estimate.functional}
 \title{Estimate Functional}
 \usage{
-estimate.functional(iden.fct = quantiles, model = constant,
-  theta0 = NULL, Y, X, stateVariable = NULL, other_data = NULL,
-  instruments = c("X", "lag(Y)"), prewhite = F, kernel = "Bartlett",
-  bw = bwNeweyWest1987, ...)
+estimate.functional(
+  iden.fct = quantiles,
+  model = constant,
+  theta0 = NULL,
+  Y,
+  X,
+  stateVariable = NULL,
+  other_data = NULL,
+  instruments = c("X", "lag(Y)"),
+  prewhite = F,
+  kernel = "Bartlett",
+  bw = bwNeweyWest1987,
+  ...
+)
 }
 \arguments{
 \item{iden.fct}{identification function. Standard choice is \code{\link{quantiles}}. The alternative is \code{\link{expectiles}}.}

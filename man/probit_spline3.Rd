@@ -25,12 +25,14 @@ variable and applies a probit link function.
 }
 \examples{
 # plot example of cubic spline specification model with state-dependent quantile/expectile level
-plot(function(x) probit_spline3(x,theta=c(0,2,1,-1)), xlim=c(-2,2))
+plot(function(x) probit_spline3(x,theta=c(0,1,1,-1)), xlim=c(-2,2))
 }
 \seealso{
-Other specification models: \code{\link{constant}},
-  \code{\link{logistic_linear}},
-  \code{\link{probit_break}}, \code{\link{probit_linear}},
-  \code{\link{probit_spline2}}
+Other specification models: 
+\code{\link{constant}()},
+\code{\link{logistic_linear}()},
+\code{\link{probit_break}()},
+\code{\link{probit_linear}()},
+\code{\link{probit_spline2}()}
 }
 \concept{specification models}

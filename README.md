@@ -1,16 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-PointFore
-=========
 
-The goal of PointFore is to estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.
+# PointFore
 
-Wald Tests and the test of overidentifying restrictions are implemented. Ploting of the estimated specification model is possible.
+The goal of PointFore is to estimate specification models for the
+state-dependent level of an optimal quantile/expectile forecast.
 
-Based on "Interpretation of Point Forecasts" by Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
+Wald Tests and the test of overidentifying restrictions are implemented.
+Plotting of the estimated specification model is possible.
 
-Installation
-------------
+Based on “Interpretation of Point Forecasts with unknown directive” by
+Patrick Schmidt, Matthias Katzfuss, and Tilmann Gneiting, 2018.
+
+## Installation
 
 You can install PointFore from github with:
 
@@ -19,10 +21,10 @@ You can install PointFore from github with:
 devtools::install_github("Schmidtpk/PointFore")
 ```
 
-Example
--------
+## Example
 
-This is a basic example which shows you how to evaluate which quantile is forecasted by the Greenbook GDP forecats:
+This is a basic example which shows you how to evaluate which quantile
+is forecasted by the Greenbook GDP forecasts:
 
 ``` r
 library(PointFore)
@@ -31,38 +33,49 @@ library(PointFore)
 #> The following object is masked from 'package:stats':
 #> 
 #>     lag
+#> The following object is masked from 'package:dplyr':
+#> 
+#>     lag
 
-res <- estimate.functional(Y=GDP$observation,X=GDP$forecast)
-#> Drop  1 case(s) because of chosen instruments
+res <- estimate.functional(Y=GDP$observation,
+                           X=GDP$forecast,
+                           instruments = c("X","lag(Y,2)"))
+#> Drop  2 case(s) because of chosen instruments
 #> Choose parameter theta0 automatically.
 
 summary(res)
 #> $call
-#> estimate.functional(Y = GDP$observation, X = GDP$forecast)
+#> estimate.functional(Y = GDP$observation, X = GDP$forecast, instruments = c("X", 
+#>     "lag(Y,2)"))
 #> 
 #> $coefficients
 #>           Estimate Std. Error  t value     Pr(>|t|)
-#> Theta[1] 0.5980637 0.04429534 13.50173 1.527435e-41
+#> Theta[1] 0.6043907 0.04349627 13.89523 6.770319e-44
 #> 
 #> $Jtest
 #> 
 #>  ##  J-Test: degrees of freedom is 2  ## 
 #> 
 #>                 J-test    P-value 
-#> Test E(g)=0:    5.507506  0.063688
+#> Test E(g)=0:    5.190767  0.074617
 
-#plot(res)
+plot(res)
 ```
 
-On average the forecast is over-optimistic with a forecasted quantile of 0.6. The J-test rejects optimality for this model.
+![](README-example-1.png)<!-- -->
 
-In the next step, we apply a more general model, where the forecasted quantile depends on the current forecast via a linear probit model.
+On average the forecast is over-optimistic with a forecasted quantile of
+0.6. The J-test rejects optimality for this model.
+
+In the next step, we apply a more general model, where the forecasted
+quantile depends on the current forecast via a linear probit model.
 
 ``` r
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
                            model=probit_linear,
+                           instruments = c("X","lag(Y,2)"),
                            stateVariable = GDP$forecast)
-#> Drop  1 case(s) because of chosen instruments
+#> Drop  2 case(s) because of chosen instruments
 #> Choose parameter theta0 automatically.
 
 
@@ -70,20 +83,25 @@ res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
 summary(res)
 #> $call
 #> estimate.functional(model = probit_linear, Y = GDP$observation, 
-#>     X = GDP$forecast, stateVariable = GDP$forecast)
+#>     X = GDP$forecast, stateVariable = GDP$forecast, instruments = c("X", 
+#>         "lag(Y,2)"))
 #> 
 #> $coefficients
 #>            Estimate Std. Error    t value   Pr(>|t|)
-#> Theta[1] -0.1125011 0.16807744 -0.6693408 0.50327812
-#> Theta[2]  0.1132529 0.04437854  2.5519745 0.01071144
+#> Theta[1] -0.1051757 0.16848538 -0.6242421 0.53246863
+#> Theta[2]  0.1147590 0.04533712  2.5312375 0.01136608
 #> 
 #> $Jtest
 #> 
 #>  ##  J-Test: degrees of freedom is 1  ## 
 #> 
 #>                 J-test   P-value
-#> Test E(g)=0:    1.38747  0.23883
-#plot(res)
+#> Test E(g)=0:    0.46912  0.49339
+plot(res)
 ```
 
-We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of 0.239 in the J-Test of overidentifying restrictions.
+![](README-example%20with%20state-dependence-1.png)<!-- -->
+
+We see that the forecast is overly optimistic in times of high growth.
+For this model we cannot reject optimality with a p-value of 0.493 in
+the J-Test of overidentifying restrictions.

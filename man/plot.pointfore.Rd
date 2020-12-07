@@ -4,8 +4,15 @@
 \alias{plot.pointfore}
 \title{Plots object of class "pointfore"}
 \usage{
-\method{plot}{pointfore}(x, conf.levels = c(0.6, 0.9), pdf = TRUE,
-  hline = TRUE, adjust.factor = 1, limits = NULL, ...)
+\method{plot}{pointfore}(
+  x,
+  conf.levels = c(0.6, 0.9),
+  pdf = TRUE,
+  hline = TRUE,
+  adjust.factor = 1,
+  limits = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class "pointfore"}

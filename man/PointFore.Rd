@@ -3,7 +3,6 @@
 \docType{package}
 \name{PointFore}
 \alias{PointFore}
-\alias{PointFore-package}
 \title{PointFore: A package for estimating state-dependent quantile and expectile levels from a time series of point forecasts and observations}
 \description{
 Estimate specification models for the state-dependent level of an optimal quantile/expectile forecast.

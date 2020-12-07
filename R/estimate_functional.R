@@ -266,6 +266,7 @@ estimate.functional <- function(iden.fct = quantiles,
                                 prewhite = F,
                                 kernel="Bartlett",
                                 bw = bwNeweyWest1987,
+                                centeredVcov = FALSE,
                                 ...)
 {
 
@@ -396,6 +397,7 @@ estimate.functional <- function(iden.fct = quantiles,
                   prewhite = prewhite,
                   kernel = kernel,
                   bw = bw,
+                  centeredVcov = centeredVcov,
                   ...)
 
 

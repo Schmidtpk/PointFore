@@ -77,9 +77,10 @@ res <- estimate.functional(iden.fct =   expectiles ,
                            theta0 = c(0,0),
                            instruments = instruments,
                            state = X,
+                           centeredVcov=FALSE,
                            Y = Y, X=X)
 summary(res)
-#0.73
+#0.74
 plot(res)
 
 
@@ -106,6 +107,7 @@ res <- estimate.functional(iden.fct =   expectiles ,
                            model = probit0,
                            theta0 = c(0,0),
                            instruments = c("X","lag(lag(Y))"),
+                           centeredVcov=vcov.cur,
                            state = X,
                            Y = Y, X=X)
 summary(res)
@@ -129,7 +131,6 @@ res <- estimate.functional(iden.fct =   expectiles ,model = probit0,
                            state = lag(Y),
                            Y = Y, X=X)
 summary(res)
-#p-value 0.48
 
 
 

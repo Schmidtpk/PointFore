@@ -36,11 +36,13 @@ This is a basic example which shows you how to evaluate which quantile is foreca
 ```{r example}
 library(PointFore)
 
-res <- estimate.functional(Y=GDP$observation,X=GDP$forecast)
+res <- estimate.functional(Y=GDP$observation,
+                           X=GDP$forecast,
+                           instruments = c("X","lag(Y,2)"))
 
 summary(res)
 
-#plot(res)
+plot(res)
 ```
 
 On average the forecast is over-optimistic with a forecasted quantile of `r round(res$gmm$coefficients[1],digits=2)`. The J-test rejects optimality for this model.
@@ -50,12 +52,13 @@ In the next step, we apply a more general model, where the forecasted quantile d
 ```{r example with state-dependence}
 res <- estimate.functional(Y=GDP$observation,X=GDP$forecast,
                            model=probit_linear,
+                           instruments = c("X","lag(Y,2)"),
                            stateVariable = GDP$forecast)
 
 
 
 summary(res)
-#plot(res)
+plot(res)
 ```
 
 We see that the forecast is overly optimistic in times of high growth. For this model we cannot reject optimality with a p-value of `r round(summary(res$gmm)$stest$test[2],digits=3)` in the J-Test of overidentifying restrictions.

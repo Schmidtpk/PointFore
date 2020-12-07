@@ -4,11 +4,13 @@
 \name{precipitation}
 \alias{precipitation}
 \title{daily accumulated precipitation (in millimeter) at London, UK and 24-hours-ahead forecasts of the ECMWF (1969-2011)}
-\format{A data frame with 2192 rows and 2 variables:
+\format{
+A data frame with 2192 rows and 2 variables:
 \itemize{
   \item Y: daily accumulated precipitation in millimeter at London, UK (0 -- 45)
   \item X: according point forecast in millimeter issued one day ahead (0 -- 40)
-}}
+}
+}
 \usage{
 precipitation
 }

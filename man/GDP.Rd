@@ -4,12 +4,16 @@
 \name{GDP}
 \alias{GDP}
 \title{real GDP realized values and one quarter ahead Greenbook forecasts (1969-2012)}
-\format{A data frame with 176 rows and 2 variables:
+\format{
+A data frame with 176 rows and 2 variables:
 \itemize{
-  \item observation: realized GDP growth rate in percentage measured at second vintage (-10.4 -- 11.2)
+  \item observation: realized GDP growth rate in percentage measured at first vintage (-10.4 -- 11.2)
+  \item observation_second: realized GDP growth rate in percentage measured at second vintage (-11.3 -- 13.2)
+  \item observation_recent: realized GDP growth rate in percentage measured at most recent vintage (-8.2 -- 16.5)
   \item forecast: according point forecast issued one quarter before (-4.7 -- 8.5)
   \item forecast_late: according point forecast issued latest in the quarter before (-4.7 -- 7.9)
-}}
+}
+}
 \source{
 \url{https://www.philadelphiafed.org/research-and-data/real-time-center/greenbook-data/philadelphia-data-set}
 }

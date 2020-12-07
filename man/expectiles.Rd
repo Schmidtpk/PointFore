@@ -33,6 +33,7 @@ summary(res)
 plot(res)
 }
 \seealso{
-Other identification functions: \code{\link{quantiles}}
+Other identification functions: 
+\code{\link{quantiles}()}
 }
 \concept{identification functions}

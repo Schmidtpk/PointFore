@@ -34,9 +34,11 @@ constant(0, 2)
 constant(0, -1)
 }
 \seealso{
-Other specification models: \code{\link{logistic_linear}},
-  \code{\link{probit_break}}, \code{\link{probit_linear}},
-  \code{\link{probit_spline2}},
-  \code{\link{probit_spline3}}
+Other specification models: 
+\code{\link{logistic_linear}()},
+\code{\link{probit_break}()},
+\code{\link{probit_linear}()},
+\code{\link{probit_spline2}()},
+\code{\link{probit_spline3}()}
 }
 \concept{specification models}

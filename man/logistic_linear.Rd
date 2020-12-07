@@ -31,9 +31,11 @@ plot(function(x) logistic_linear(x,theta=c(0,0)), xlim=c(-1,1))
 plot(function(x) logistic_linear(x,theta=c(0,5)), xlim=c(-1,1))
 }
 \seealso{
-Other specification models: \code{\link{constant}},
-  \code{\link{probit_break}}, \code{\link{probit_linear}},
-  \code{\link{probit_spline2}},
-  \code{\link{probit_spline3}}
+Other specification models: 
+\code{\link{constant}()},
+\code{\link{probit_break}()},
+\code{\link{probit_linear}()},
+\code{\link{probit_spline2}()},
+\code{\link{probit_spline3}()}
 }
 \concept{specification models}
