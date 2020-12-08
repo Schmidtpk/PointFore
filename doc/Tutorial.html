@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Patrick Schmidt" />
+
+<meta name="date" content="2020-12-08" />
+
+<title>Tutorial for PointFore</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Tutorial for PointFore</h1>
+<h4 class="author">Patrick Schmidt</h4>
+<h4 class="date">2020-12-08</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The PointFore package can be loaded the usual way.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(PointFore)</a></code></pre></div>
+<p>The main function is <em>estimate.functional()</em> which creates an object of class <em>pointfore</em>. Many parameters are available but most of them can be set to their default values. They are explained in details below through examples.</p>
+<p>The function <em>estimate.functional()</em> provides a convenient wrapper for the estimation based on the <em>gmm package</em>. The main arguments are the <em>forecast X</em> and the <em>realizations Y</em>. Further, one can choose between <em>quantiles</em> and <em>expectiles</em> and the model that describes the forecasted level.</p>
+<p>The available methods for a pointfore object are <em>plot</em> and <em>summary</em>.</p>
+</div>
+<div id="simulated-example" class="section level1">
+<h1>Simulated Example</h1>
+<p>We illustrate the application of the package in a simple simulated example.</p>
+<div id="generate-data" class="section level2">
+<h2>Generate data</h2>
+<p>First, we generate a time series Y with mean Y.mean. Further, we generate an <strong>optimal mean-forecast X</strong>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3">Y.mean &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">200</span>,<span class="dv">0</span>,<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4"></a>
+<a class="sourceLine" id="cb2-5" title="5">Y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">200</span>,Y.mean,<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7">X &lt;-<span class="st"> </span>Y.mean</a></code></pre></div>
+</div>
+<div id="estimation-of-the-functional" class="section level2">
+<h2>Estimation of the functional</h2>
+<p>Now, we apply a class of <strong>constant expectile forecasts</strong>. The <em>summary</em> function shows the call and the estimation result, and the J-test of overidentifying restrictions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">res.const &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(</a>
+<a class="sourceLine" id="cb3-2" title="2">                            <span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb3-3" title="3">                            <span class="dt">model =</span> constant,</a>
+<a class="sourceLine" id="cb3-4" title="4">                            <span class="dt">Y =</span> Y,</a>
+<a class="sourceLine" id="cb3-5" title="5">                            <span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb3-6" title="6">                            <span class="dt">theta0 =</span> <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb3-8" title="8"></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="kw">summary</span>(res.const)</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; estimate.functional(iden.fct = expectiles, model = constant, </span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;     theta0 = 0.5, Y = Y, X = X)</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; $coefficients</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt;           Estimate Std. Error  t value     Pr(&gt;|t|)</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; Theta[1] 0.4796441 0.03479203 13.78604 3.092978e-43</span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; $Jtest</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 2  ## </span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="co">#&gt;                 J-test   P-value</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="co">#&gt; Test E(g)=0:    1.32148  0.51647</span></a></code></pre></div>
+<p>The results imply an expectile level close to 0.5.</p>
+<p>In a second step, we estimate a <strong>state-dependent expectile</strong> model, where the level of the expectile can depend on the current forecast.</p>
+<p>The <em>linear probit</em> model is already implemented in the <em>PointFore</em> package. The level of the forecast depends on the the state variable s, via the formula</p>
+<p><span class="math display">\[ level = inv.logit(\theta_1 + s \theta_2)= (1+exp(\theta_1 + s \theta_2)^{-1})^{-1}. \]</span>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">res.flexible &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb4-2" title="2">                                    <span class="dt">model =</span> probit_linear,</a>
+<a class="sourceLine" id="cb4-3" title="3">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb4-4" title="4">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb4-5" title="5">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="kw">summary</span>(res.flexible)</a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; estimate.functional(iden.fct = expectiles, model = probit_linear, </span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt;     theta0 = c(0, 0), Y = Y, X = X, stateVariable = X)</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; $coefficients</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt;             Estimate Std. Error    t value  Pr(&gt;|t|)</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; Theta[1] -0.05117311 0.08734181 -0.5858948 0.5579462</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt; Theta[2]  0.03964611 0.09039476  0.4385885 0.6609597</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="co">#&gt; $Jtest</span></a>
+<a class="sourceLine" id="cb4-18" title="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 1  ## </span></a>
+<a class="sourceLine" id="cb4-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="co">#&gt;                 J-test  P-value</span></a>
+<a class="sourceLine" id="cb4-22" title="22"><span class="co">#&gt; Test E(g)=0:    1.1545  0.2826</span></a></code></pre></div>
+</div>
+<div id="plot-results" class="section level2">
+<h2>Plot results</h2>
+<p>For interpretation, the results can be plotted with the according pointwise confidence intervals. For state-dependent models the state is plotted on the x-axis. In green, we see a density estimate of the state.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">plot</span>(res.const)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">plot</span>(res.flexible)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" alt="The results of the constant and flexible model plotted against the forecast." /><img src="data:image/png;base64,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" alt="The results of the constant and flexible model plotted against the forecast." /></p>
+</div>
+<div id="wald-tests" class="section level2">
+<h2>Wald tests</h2>
+<p>It is straight forward to apply standard Wald tests to the estimated <em>gmm-object</em>. First, we have to load the car package.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; Loading required package: carData</span></a></code></pre></div>
+<p>For the constant model, the mean forecast, which is equal to the <span class="math inline">\(0.5\)</span>-expectile forecast cannot be rejected by a Wald-type test</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">linearHypothesis</span>(res.const<span class="op">$</span>gmm,<span class="st">&quot;Theta[1]=0.5&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; Linear hypothesis test</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Hypothesis:</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; Theta[1] = 0.5</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Model 1: restricted model</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; Model 2: res.const$gmm</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;   Df  Chisq Pr(&gt;Chisq)</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; 1                     </span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; 2  1 0.3423     0.5585</span></a></code></pre></div>
+<p>Similarly, the flexible linear probit model cannot reject the mean-forecast (<span class="math inline">\(H_0: \theta_1=0 \wedge \theta_2 =0\)</span>), nor state-independence(<span class="math inline">\(H_0: \theta_2 =0\)</span>).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">linearHypothesis</span>(res.flexible<span class="op">$</span>gmm,<span class="kw">c</span>(<span class="st">&quot;Theta[1]=0&quot;</span>, <span class="st">&quot;Theta[2]=0&quot;</span>))</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; Linear hypothesis test</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; Hypothesis:</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; Theta[1] = 0</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; Theta[2] = 0</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; Model 1: restricted model</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; Model 2: res.flexible$gmm</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt;   Df Chisq Pr(&gt;Chisq)</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; 1                    </span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; 2  2 0.531     0.7668</span></a>
+<a class="sourceLine" id="cb8-14" title="14"></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="kw">linearHypothesis</span>(res.flexible<span class="op">$</span>gmm,<span class="st">&quot;Theta[2]=0&quot;</span>)</a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt; Linear hypothesis test</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt; Hypothesis:</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt; Theta[2] = 0</span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt; Model 1: restricted model</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt; Model 2: res.flexible$gmm</span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co">#&gt;   Df  Chisq Pr(&gt;Chisq)</span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="co">#&gt; 1                     </span></a>
+<a class="sourceLine" id="cb8-26" title="26"><span class="co">#&gt; 2  1 0.1924      0.661</span></a></code></pre></div>
+</div>
+</div>
+<div id="creating-your-own-specification-models" class="section level1">
+<h1>Creating your own specification models</h1>
+<p>You can also <strong>create your own specification models</strong>, which describe how the levels of the quantile/expectile depend on the state variable.</p>
+<p>The two parameters  and  are necessary. The output is the level and should always be in the unit interval.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">break_model &lt;-<span class="st"> </span><span class="cf">function</span>(stateVariable, theta)</a>
+<a class="sourceLine" id="cb9-2" title="2">{</a>
+<a class="sourceLine" id="cb9-3" title="3">  <span class="cf">if</span>(<span class="kw">length</span>(theta)<span class="op">!=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb9-4" title="4">    <span class="kw">stop</span>(<span class="st">&quot;Wrong dimension of theta&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" title="5">  </a>
+<a class="sourceLine" id="cb9-6" title="6">  <span class="kw">return</span>(boot<span class="op">::</span><span class="kw">inv.logit</span>(theta[<span class="dv">1</span>]<span class="op">+</span>theta[<span class="dv">2</span>]<span class="op">*</span>(stateVariable<span class="op">&gt;</span><span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb9-7" title="7">}</a></code></pre></div>
+<p>Now, we can estimate the model</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">res.break &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb10-2" title="2">                                    <span class="dt">model =</span> break_model,</a>
+<a class="sourceLine" id="cb10-3" title="3">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb10-4" title="4">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb10-5" title="5">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb10-7" title="7"></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="kw">summary</span>(res.break)</a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt; estimate.functional(iden.fct = expectiles, model = break_model, </span></a>
+<a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt;     theta0 = c(0, 0), Y = Y, X = X, stateVariable = X)</span></a>
+<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt; $coefficients</span></a>
+<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt;            Estimate Std. Error    t value  Pr(&gt;|t|)</span></a>
+<a class="sourceLine" id="cb10-15" title="15"><span class="co">#&gt; Theta[1] -0.1476074  0.2088905 -0.7066256 0.4797992</span></a>
+<a class="sourceLine" id="cb10-16" title="16"><span class="co">#&gt; Theta[2]  0.1459117  0.3391488  0.4302292 0.6670289</span></a>
+<a class="sourceLine" id="cb10-17" title="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-18" title="18"><span class="co">#&gt; $Jtest</span></a>
+<a class="sourceLine" id="cb10-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-20" title="20"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 1  ## </span></a>
+<a class="sourceLine" id="cb10-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-22" title="22"><span class="co">#&gt;                 J-test   P-value</span></a>
+<a class="sourceLine" id="cb10-23" title="23"><span class="co">#&gt; Test E(g)=0:    1.15769  0.28194</span></a>
+<a class="sourceLine" id="cb10-24" title="24"></a>
+<a class="sourceLine" id="cb10-25" title="25"><span class="kw">plot</span>(res.break)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>If we use a <strong>forecast that is biased</strong> for positive means:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">X &lt;-<span class="st"> </span>Y.mean <span class="op">+</span><span class="st"> </span><span class="fl">0.2</span> <span class="op">*</span>(Y.mean<span class="op">&gt;</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3">res.break &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb11-4" title="4">                                    <span class="dt">model =</span> break_model,</a>
+<a class="sourceLine" id="cb11-5" title="5">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb11-6" title="6">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb11-7" title="7">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb11-9" title="9"></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="kw">summary</span>(res.break)</a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt; estimate.functional(iden.fct = expectiles, model = break_model, </span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt;     theta0 = c(0, 0), Y = Y, X = X, stateVariable = X)</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt; $coefficients</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt;            Estimate Std. Error    t value   Pr(&gt;|t|)</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt; Theta[1] -0.1480030  0.2072338 -0.7141838 0.47511353</span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt; Theta[2]  0.6859433  0.3115846  2.2014674 0.02770295</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt; $Jtest</span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-22" title="22"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 1  ## </span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="co">#&gt;                 J-test  P-value</span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt; Test E(g)=0:    1.6504  0.1989</span></a>
+<a class="sourceLine" id="cb11-26" title="26"></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="kw">plot</span>(res.break)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>A bias that can also be detected by the linear probit model, which has a similar shape.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">res.flexible &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb12-2" title="2">                                    <span class="dt">model =</span> probit_linear,</a>
+<a class="sourceLine" id="cb12-3" title="3">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb12-4" title="4">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb12-5" title="5">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb12-7" title="7"></a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="kw">summary</span>(res.flexible)</a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt; estimate.functional(iden.fct = expectiles, model = probit_linear, </span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="co">#&gt;     theta0 = c(0, 0), Y = Y, X = X, stateVariable = X)</span></a>
+<a class="sourceLine" id="cb12-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="co">#&gt; $coefficients</span></a>
+<a class="sourceLine" id="cb12-14" title="14"><span class="co">#&gt;            Estimate Std. Error   t value   Pr(&gt;|t|)</span></a>
+<a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt; Theta[1] 0.08944123 0.08991022 0.9947838 0.31984140</span></a>
+<a class="sourceLine" id="cb12-16" title="16"><span class="co">#&gt; Theta[2] 0.17060123 0.08044133 2.1208157 0.03393732</span></a>
+<a class="sourceLine" id="cb12-17" title="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-18" title="18"><span class="co">#&gt; $Jtest</span></a>
+<a class="sourceLine" id="cb12-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-20" title="20"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 1  ## </span></a>
+<a class="sourceLine" id="cb12-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-22" title="22"><span class="co">#&gt;                 J-test   P-value</span></a>
+<a class="sourceLine" id="cb12-23" title="23"><span class="co">#&gt; Test E(g)=0:    1.67399  0.19572</span></a>
+<a class="sourceLine" id="cb12-24" title="24"></a>
+<a class="sourceLine" id="cb12-25" title="25"><span class="kw">plot</span>(res.flexible)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="applying-non-standard-instruments" class="section level1">
+<h1>Applying non-standard instruments</h1>
+<p>However, the biased forecast is <strong>not optimal with respect to the linear probit model</strong>. The deviation can be detected by the J-test of overidentifying restrictions if we use appropriate instruments, that generate a sufficiently rich information set to test for.</p>
+<p>If we include the squared forecast with its original sign in the instruments, the test rejects optimality with respect to the linear probit model with a p-value below 0.05 and correctly cannot reject optimality with respect to the break model with a p-value of 0.11.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">res.flexible &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb13-2" title="2">                                    <span class="dt">model =</span> probit_linear,</a>
+<a class="sourceLine" id="cb13-3" title="3">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb13-4" title="4">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb13-5" title="5">                                    <span class="dt">instruments =</span> <span class="kw">c</span>(<span class="st">&quot;lag(Y)&quot;</span>,<span class="st">&quot;X&quot;</span>,<span class="st">&quot;sign(X)*X^2&quot;</span>),</a>
+<a class="sourceLine" id="cb13-6" title="6">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb13-8" title="8"></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="kw">summary</span>(res.flexible)<span class="op">$</span>Jtest</a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 2  ## </span></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-13" title="13"><span class="co">#&gt;                 J-test    P-value </span></a>
+<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt; Test E(g)=0:    4.949616  0.084179</span></a>
+<a class="sourceLine" id="cb13-15" title="15"></a>
+<a class="sourceLine" id="cb13-16" title="16">res.break &lt;-<span class="st"> </span><span class="kw">estimate.functional</span>(<span class="dt">iden.fct =</span> expectiles,</a>
+<a class="sourceLine" id="cb13-17" title="17">                                    <span class="dt">model =</span> probit_break,</a>
+<a class="sourceLine" id="cb13-18" title="18">                                    <span class="dt">Y =</span> Y,<span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb13-19" title="19">                                    <span class="dt">theta0 =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb13-20" title="20">                                    <span class="dt">instruments =</span> <span class="kw">c</span>(<span class="st">&quot;lag(Y)&quot;</span>,<span class="st">&quot;X&quot;</span>,<span class="st">&quot;sign(X)*X^2&quot;</span>),</a>
+<a class="sourceLine" id="cb13-21" title="21">                                    <span class="dt">stateVariable =</span> X)</a>
+<a class="sourceLine" id="cb13-22" title="22"><span class="co">#&gt; Drop  1 case(s) because of chosen instruments</span></a>
+<a class="sourceLine" id="cb13-23" title="23"></a>
+<a class="sourceLine" id="cb13-24" title="24"><span class="kw">summary</span>(res.break)<span class="op">$</span>Jtest</a>
+<a class="sourceLine" id="cb13-25" title="25"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-26" title="26"><span class="co">#&gt;  ##  J-Test: degrees of freedom is 2  ## </span></a>
+<a class="sourceLine" id="cb13-27" title="27"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-28" title="28"><span class="co">#&gt;                 J-test   P-value</span></a>
+<a class="sourceLine" id="cb13-29" title="29"><span class="co">#&gt; Test E(g)=0:    3.18902  0.20301</span></a></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
